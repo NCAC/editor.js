@@ -9,14 +9,9 @@ declare module 'html-janitor' {
     };
   }
 
-  export class HTMLJanitor {
+  export default class HTMLJanitor {
     constructor(config: Config);
 
     public clean(taintString: string): string;
   }
-
-  /**
-   * Default export
-   */
-  export default HTMLJanitor;
 }

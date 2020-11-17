@@ -5,25 +5,24 @@ import { EditorConfig } from '../types';
 /**
  * Apply polyfills
  */
-import '@babel/register';
+// import '@babel/register';
 
-import 'components/polyfills';
-import Core from './components/core';
+// import 'components/polyfills';
+import { Core } from './components/core';
 import * as _ from './components/utils';
 
-declare const VERSION: string;
 
 /**
  * Editor.js
  *
  * Short Description (눈_눈;)
  *
- * @version 2.18.0
+ * @version 2.19.1
  *
  * @license Apache-2.0
  * @author CodeX-Team <https://ifmo.su>
  */
-export default class EditorJS {
+class EditorJS {
   /**
    * Promise that resolves when core modules are ready and UI is rendered on the page
    */
@@ -37,7 +36,7 @@ export default class EditorJS {
 
   /** Editor version */
   public static get version(): string {
-    return VERSION;
+    return '2.19.1';
   }
 
   /**
@@ -137,3 +136,8 @@ export default class EditorJS {
       });
   }
 }
+interface WindowInterface extends Window {
+  EditorJS: any
+}
+
+(window as WindowInterface & typeof globalThis).EditorJS = EditorJS;

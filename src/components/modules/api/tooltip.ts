@@ -1,12 +1,14 @@
 import { Tooltip } from '../../../../types/api';
 import { TooltipContent, TooltipOptions } from 'codex-tooltip';
-import Module from '../../__module';
+import { Module } from '../../__module';
 
 /**
  * @class TooltipAPI
  * @classdesc Tooltip API
  */
-export default class TooltipAPI extends Module {
+export class TooltipAPI extends Module {
+
+  public static readonly displayName = 'TooltipAPI';
   /**
    * Available methods
    */

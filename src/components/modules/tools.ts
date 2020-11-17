@@ -1,5 +1,5 @@
-import Paragraph from '../tools/paragraph/dist/bundle';
-import Module from '../__module';
+import { Paragraph } from '../tools/paragraph/';
+import {Module} from '../__module';
 import * as _ from '../utils';
 import {
   BlockToolConstructable,
@@ -10,10 +10,10 @@ import {
   ToolConstructable,
   ToolSettings
 } from '../../../types';
-import BoldInlineTool from '../inline-tools/inline-tool-bold';
-import ItalicInlineTool from '../inline-tools/inline-tool-italic';
-import LinkInlineTool from '../inline-tools/inline-tool-link';
-import Stub from '../tools/stub';
+import { BoldInlineTool } from '../inline-tools/inline-tool-bold';
+import { ItalicInlineTool } from '../inline-tools/inline-tool-italic';
+import { LinkInlineTool } from '../inline-tools/inline-tool-link';
+import { Stub } from '../tools/stub';
 
 /**
  * @module Editor.js Tools Submodule
@@ -31,7 +31,9 @@ import Stub from '../tools/stub';
  * @property {object} toolsSettings - Tools settings
  * @property {EditorConfig} config - Editor config
  */
-export default class Tools extends Module {
+export class Tools extends Module {
+
+  public static readonly displayName = 'Tools';
   /**
    * Name of Stub Tool
    * Stub Tool is used to substitute unavailable block Tools and store their data

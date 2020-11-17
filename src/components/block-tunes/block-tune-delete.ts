@@ -5,12 +5,12 @@
  * @copyright <CodeX Team> 2018
  */
 import { API, BlockTune } from '../../../types';
-import $ from '../dom';
+import { Dom } from '../dom';
 
 /**
  *
  */
-export default class DeleteTune implements BlockTune {
+export class DeleteTune implements BlockTune {
   /**
    * Property that contains Editor.js API methods
    *
@@ -63,8 +63,8 @@ export default class DeleteTune implements BlockTune {
    * @returns {HTMLElement}
    */
   public render(): HTMLElement {
-    this.nodes.button = $.make('div', [this.CSS.button, this.CSS.buttonDelete], {});
-    this.nodes.button.appendChild($.svg('cross', 12, 12));
+    this.nodes.button = Dom.make('div', [this.CSS.button, this.CSS.buttonDelete], {});
+    this.nodes.button.appendChild(Dom.svg('cross', 12, 12));
     this.api.listeners.on(this.nodes.button, 'click', (event: MouseEvent) => this.handleClick(event), false);
 
     /**

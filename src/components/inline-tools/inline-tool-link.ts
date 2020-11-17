@@ -1,6 +1,6 @@
-import SelectionUtils from '../selection';
+import { SelectionUtils } from '../selection';
 
-import $ from '../dom';
+import { Dom } from '../dom';
 import * as _ from '../utils';
 import { API, InlineTool, SanitizerConfig } from '../../../types';
 import { Notifier, Toolbar, I18n } from '../../../types/api';
@@ -12,7 +12,7 @@ import { Notifier, Toolbar, I18n } from '../../../types/api';
  *
  * Wrap selected text with <a> tag
  */
-export default class LinkInlineTool implements InlineTool {
+export class LinkInlineTool implements InlineTool {
   /**
    * Specifies Tool as Inline Toolbar Tool
    *
@@ -123,8 +123,8 @@ export default class LinkInlineTool implements InlineTool {
     this.nodes.button = document.createElement('button') as HTMLButtonElement;
     this.nodes.button.type = 'button';
     this.nodes.button.classList.add(this.CSS.button, this.CSS.buttonModifier);
-    this.nodes.button.appendChild($.svg('link', 14, 10));
-    this.nodes.button.appendChild($.svg('unlink', 15, 11));
+    this.nodes.button.appendChild(Dom.svg('link', 14, 10));
+    this.nodes.button.appendChild(Dom.svg('unlink', 15, 11));
 
     return this.nodes.button;
   }

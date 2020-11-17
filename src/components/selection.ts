@@ -2,7 +2,7 @@
  * TextRange interface fot IE9-
  */
 import * as _ from './utils';
-import $ from './dom';
+import { Dom } from './dom';
 
 interface TextRange {
   boundingTop: number;
@@ -33,7 +33,7 @@ interface Document {
  *
  * @typedef {SelectionUtils} SelectionUtils
  */
-export default class SelectionUtils {
+export class SelectionUtils {
   /**
    * Editor styles
    *
@@ -76,7 +76,7 @@ export default class SelectionUtils {
       return null;
     }
 
-    if (!$.isElement(anchorNode)) {
+    if (!Dom.isElement(anchorNode)) {
       return anchorNode.parentElement;
     } else {
       return anchorNode;
@@ -288,8 +288,8 @@ export default class SelectionUtils {
     const selection = window.getSelection();
 
     /** if found deepest node is native input */
-    if ($.isNativeInput(element)) {
-      if (!$.canSetCaret(element)) {
+    if (Dom.isNativeInput(element)) {
+      if (!Dom.canSetCaret(element)) {
         return;
       }
 

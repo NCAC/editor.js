@@ -1,8 +1,9 @@
-import Module from '../../__module';
-import $ from '../../dom';
+import { Module } from '../../__module';
+import { Dom } from '../../dom';
 import * as _ from '../../utils';
-import I18n from '../../i18n';
+import { I18nConstructor } from '../../i18n';
 import { I18nInternalNS } from '../../i18n/namespace-internal';
+
 
 /**
  * HTML Elements used for Toolbar UI
@@ -71,7 +72,9 @@ interface ToolbarNodes {
  * @property {Element} nodes.pluginSettings    - Plugin Settings section of Settings Panel
  * @property {Element} nodes.defaultSettings   - Default Settings section of Settings Panel
  */
-export default class Toolbar extends Module<ToolbarNodes> {
+export class Toolbar extends Module<ToolbarNodes> {
+
+  public static readonly displayName = 'Toolbar';
   /**
    * CSS styles
    *
@@ -239,29 +242,29 @@ export default class Toolbar extends Module<ToolbarNodes> {
    * Draws Toolbar elements
    */
   private make(): void {
-    this.nodes.wrapper = $.make('div', this.CSS.toolbar);
+    this.nodes.wrapper = Dom.make('div', this.CSS.toolbar);
 
     /**
      * Make Content Zone and Actions Zone
      */
     ['content', 'actions'].forEach((el) => {
-      this.nodes[el] = $.make('div', this.CSS[el]);
+      this.nodes[el] = Dom.make('div', this.CSS[el]);
     });
 
     /**
      * Actions will be included to the toolbar content so we can align in to the right of the content
      */
-    $.append(this.nodes.wrapper, this.nodes.content);
-    $.append(this.nodes.content, this.nodes.actions);
+    Dom.append(this.nodes.wrapper, this.nodes.content);
+    Dom.append(this.nodes.content, this.nodes.actions);
 
     /**
      * Fill Content Zone:
      *  - Plus Button
      *  - Toolbox
      */
-    this.nodes.plusButton = $.make('div', this.CSS.plusButton);
-    $.append(this.nodes.plusButton, $.svg('plus', 14, 14));
-    $.append(this.nodes.content, this.nodes.plusButton);
+    this.nodes.plusButton = Dom.make('div', this.CSS.plusButton);
+    Dom.append(this.nodes.plusButton, Dom.svg('plus', 14, 14));
+    Dom.append(this.nodes.content, this.nodes.plusButton);
 
     this.readOnlyMutableListeners.on(this.nodes.plusButton, 'click', () => {
       this.plusButtonClicked();
@@ -270,10 +273,10 @@ export default class Toolbar extends Module<ToolbarNodes> {
     /**
      * Add events to show/hide tooltip for plus button
      */
-    const tooltipContent = $.make('div');
+    const tooltipContent = Dom.make('div');
 
-    tooltipContent.appendChild(document.createTextNode(I18n.ui(I18nInternalNS.ui.toolbar.toolbox, 'Add')));
-    tooltipContent.appendChild($.make('div', this.CSS.plusButtonShortcut, {
+    tooltipContent.appendChild(document.createTextNode(I18nConstructor.ui(I18nInternalNS.ui.toolbar.toolbox, 'Add')));
+    tooltipContent.appendChild(Dom.make('div', this.CSS.plusButtonShortcut, {
       textContent: '⇥ Tab',
     }));
 
@@ -285,17 +288,17 @@ export default class Toolbar extends Module<ToolbarNodes> {
      *  - Remove Block Button
      *  - Settings Panel
      */
-    this.nodes.blockActionsButtons = $.make('div', this.CSS.blockActionsButtons);
-    this.nodes.settingsToggler = $.make('span', this.CSS.settingsToggler);
-    const settingsIcon = $.svg('dots', 8, 8);
+    this.nodes.blockActionsButtons = Dom.make('div', this.CSS.blockActionsButtons);
+    this.nodes.settingsToggler = Dom.make('span', this.CSS.settingsToggler);
+    const settingsIcon = Dom.svg('dots', 8, 8);
 
-    $.append(this.nodes.settingsToggler, settingsIcon);
-    $.append(this.nodes.blockActionsButtons, this.nodes.settingsToggler);
-    $.append(this.nodes.actions, this.nodes.blockActionsButtons);
+    Dom.append(this.nodes.settingsToggler, settingsIcon);
+    Dom.append(this.nodes.blockActionsButtons, this.nodes.settingsToggler);
+    Dom.append(this.nodes.actions, this.nodes.blockActionsButtons);
 
     this.Editor.Tooltip.onHover(
       this.nodes.settingsToggler,
-      I18n.ui(I18nInternalNS.ui.blockTunes.toggler, 'Click to tune'),
+      I18nConstructor.ui(I18nInternalNS.ui.blockTunes.toggler, 'Click to tune'),
       {
         placement: 'top',
       }
@@ -304,13 +307,13 @@ export default class Toolbar extends Module<ToolbarNodes> {
     /**
      * Appending Toolbar components to itself
      */
-    $.append(this.nodes.content, this.Editor.Toolbox.nodes.toolbox);
-    $.append(this.nodes.actions, this.Editor.BlockSettings.nodes.wrapper);
+    Dom.append(this.nodes.content, this.Editor.Toolbox.nodes.toolbox);
+    Dom.append(this.nodes.actions, this.Editor.BlockSettings.nodes.wrapper);
 
     /**
      * Append toolbar to the Editor
      */
-    $.append(this.Editor.UI.nodes.wrapper, this.nodes.wrapper);
+    Dom.append(this.Editor.UI.nodes.wrapper, this.nodes.wrapper);
   }
 
   /**

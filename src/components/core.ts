@@ -1,31 +1,15 @@
-import $ from './dom';
+import { Dom } from './dom';
 import * as _ from './utils';
 import { EditorConfig, OutputData, SanitizerConfig } from '../../types';
 import { EditorModules } from '../types-internal/editor-modules';
-import I18n from './i18n';
+import { I18nConstructor } from './i18n';
 import { CriticalError } from './errors/critical';
+import { Modules } from './modules';
 
 /**
  * @typedef {Core} Core - editor core class
  */
 
-/**
- * Require Editor modules places in components/modules dir
- */
-const contextRequire = require.context('./modules', true);
-
-const modules = [];
-
-contextRequire.keys().forEach((filename) => {
-  /**
-   * Include files if:
-   * - extension is .js or .ts
-   * - does not starts with _
-   */
-  if (filename.match(/^\.\/[^_][\w/]*\.([tj])s$/)) {
-    modules.push(contextRequire(filename));
-  }
-});
 
 /**
  * @class Core
@@ -37,7 +21,7 @@ contextRequire.keys().forEach((filename) => {
  *
  * @type {Core}
  */
-export default class Core {
+export class Core {
   /**
    * Editor configuration passed by user to the constructor
    */
@@ -213,7 +197,7 @@ export default class Core {
      * Adjust i18n
      */
     if (config.i18n?.messages) {
-      I18n.setDictionary(config.i18n.messages);
+      I18nConstructor.setDictionary(config.i18n.messages);
     }
 
     /**
@@ -246,11 +230,11 @@ export default class Core {
     /**
      * Check for a holder element's existence
      */
-    if (typeof holder === 'string' && !$.get(holder)) {
+    if (typeof holder === 'string' && !Dom.get(holder)) {
       throw Error(`element with ID «${holder}» is missing. Pass correct holder's ID.`);
     }
 
-    if (holder && typeof holder === 'object' && !$.isElement(holder)) {
+    if (holder && typeof holder === 'object' && !Dom.isElement(holder)) {
       throw Error('holder as HTMLElement if provided must be inherit from Element class.');
     }
   }
@@ -324,11 +308,11 @@ export default class Core {
    * Make modules instances and save it to the @property this.moduleInstances
    */
   private constructModules(): void {
-    modules.forEach((module) => {
+    Modules.forEach((Module) => {
       /**
        * If module has non-default exports, passed object contains them all and default export as 'default' property
        */
-      const Module = _.isFunction(module) ? module : module.default;
+      // const Module = _.isFunction(module) ? module : module.default;
 
       try {
         /**
@@ -339,11 +323,11 @@ export default class Core {
          *
          * @see  https://www.npmjs.com/package/babel-plugin-class-display-name
          */
-        this.moduleInstances[Module.displayName] = new Module({
-          config: this.configuration,
+        this.moduleInstances[(Module as any).displayName] = new Module({
+          config: this.configuration as EditorConfig,
         });
       } catch (e) {
-        _.log(`Module ${Module.displayName} skipped because`, 'warn', e);
+        _.log(`Module ${(Module as any).displayName} skipped because`, 'warn', e);
       }
     });
   }

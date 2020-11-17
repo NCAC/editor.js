@@ -1,18 +1,18 @@
 import * as _ from './utils';
-import $ from './dom';
-import Block, { BlockToolAPI } from './block';
+import { Dom } from './dom';
+import { Block, BlockToolAPI } from './block';
 import { MoveEvent } from '../../types/tools';
 
 /**
  * @class Blocks
- * @classdesc Class to work with Block instances array
+ * @classdesc Class to work with Block instances a rray
  *
  * @private
  *
  * @property {HTMLElement} workingArea — editor`s working node
  *
  */
-export default class Blocks {
+export class Blocks {
   /**
    * Array of Block instances in order of addition
    */
@@ -136,7 +136,7 @@ export default class Blocks {
     /**
      * Change in DOM
      */
-    $.swap(this.blocks[first].holder, secondBlock.holder);
+    Dom.swap(this.blocks[first].holder, secondBlock.holder);
 
     /**
      * Change in array

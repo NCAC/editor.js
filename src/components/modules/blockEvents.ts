@@ -1,15 +1,17 @@
 /**
  * Contains keyboard and mouse events binded on each Block by Block Manager
  */
-import Module from '../__module';
+import {Module} from '../__module';
 import * as _ from '../utils';
-import SelectionUtils from '../selection';
-import Flipper from '../flipper';
+import { SelectionUtils } from '../selection';
+import { Flipper } from '../flipper';
 
 /**
  *
  */
-export default class BlockEvents extends Module {
+export class BlockEvents extends Module {
+
+  public static readonly displayName = 'BlockEvents';
   /**
    * All keydowns on Block
    *

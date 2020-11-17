@@ -1,5 +1,5 @@
-import Module from '../__module';
-import $ from '../dom';
+import { Module } from '../__module';
+import { Dom } from '../dom';
 import * as _ from '../utils';
 import {
   BlockTool,
@@ -8,7 +8,7 @@ import {
   PasteEvent,
   PasteEventDetail
 } from '../../../types';
-import Block from '../block';
+import { Block } from '../block';
 import { SavedData } from '../../../types/data-formats';
 
 /**
@@ -109,7 +109,9 @@ interface PasteData {
  *
  * @version 2.0.0
  */
-export default class Paste extends Module {
+export class Paste extends Module {
+
+  public static readonly displayName = 'Paste';
   /** If string`s length is greater than this number we don't check paste patterns */
   public static readonly PATTERN_PROCESSING_MAX_LENGTH = 450;
 
@@ -216,7 +218,7 @@ export default class Paste extends Module {
     const cleanData = Sanitizer.clean(htmlData, customConfig);
 
     /** If there is no HTML or HTML string is equal to plain one, process it as plain text */
-    if (!cleanData.trim() || cleanData.trim() === plainData || !$.isHTMLString(cleanData)) {
+    if (!cleanData.trim() || cleanData.trim() === plainData || !Dom.isHTMLString(cleanData)) {
       await this.processText(plainData);
     } else {
       await this.processText(cleanData, true);
@@ -315,7 +317,7 @@ export default class Paste extends Module {
       this.getPatternsConfig(name, toolPasteConfig);
     } catch (e) {
       _.log(
-        `Paste handling for «${name}» Tool hasn't been set up because of the error`,
+        `Paste handling for «Dom{name}» Tool hasn't been set up because of the error`,
         'warn',
         e
       );
@@ -334,8 +336,8 @@ export default class Paste extends Module {
     tags.forEach((tag) => {
       if (Object.prototype.hasOwnProperty.call(this.toolsTags, tag)) {
         _.log(
-          `Paste handler for «${name}» Tool on «${tag}» tag is skipped ` +
-          `because it is already used by «${this.toolsTags[tag].tool}» Tool.`,
+          `Paste handler for «Dom{name}» Tool on «Dom{tag}» tag is skipped ` +
+          `because it is already used by «Dom{this.toolsTags[tag].tool}» Tool.`,
           'warn'
         );
 
@@ -365,19 +367,19 @@ export default class Paste extends Module {
     }
 
     if (extensions && !Array.isArray(extensions)) {
-      _.log(`«extensions» property of the onDrop config for «${name}» Tool should be an array`);
+      _.log(`«extensions» property of the onDrop config for «Dom{name}» Tool should be an array`);
       extensions = [];
     }
 
     if (mimeTypes && !Array.isArray(mimeTypes)) {
-      _.log(`«mimeTypes» property of the onDrop config for «${name}» Tool should be an array`);
+      _.log(`«mimeTypes» property of the onDrop config for «Dom{name}» Tool should be an array`);
       mimeTypes = [];
     }
 
     if (mimeTypes) {
       mimeTypes = mimeTypes.filter((type) => {
         if (!_.isValidMimeType(type)) {
-          _.log(`MIME type value «${type}» for the «${name}» Tool is not a valid MIME type`, 'warn');
+          _.log(`MIME type value «Dom{type}» for the «Dom{name}» Tool is not a valid MIME type`, 'warn');
 
           return false;
         }
@@ -407,7 +409,7 @@ export default class Paste extends Module {
       /** Still need to validate pattern as it provided by user */
       if (!(pattern instanceof RegExp)) {
         _.log(
-          `Pattern ${pattern} for «${name}» Tool is skipped because it should be a Regexp instance.`,
+          `Pattern Dom{pattern} for «Dom{name}» Tool is skipped because it should be a Regexp instance.`,
           'warn'
         );
       }
@@ -428,7 +430,7 @@ export default class Paste extends Module {
    * @returns {boolean}
    */
   private isNativeBehaviour(element: EventTarget): boolean {
-    return $.isNativeInput(element);
+    return Dom.isNativeInput(element);
   }
 
   /**
@@ -535,7 +537,7 @@ export default class Paste extends Module {
   private processHTML(innerHTML: string): PasteData[] {
     const { Tools, Sanitizer } = this.Editor;
     const initialTool = this.config.defaultBlock;
-    const wrapper = $.make('DIV');
+    const wrapper = Dom.make('DIV');
 
     wrapper.innerHTML = innerHTML;
 
@@ -548,7 +550,7 @@ export default class Paste extends Module {
         switch (node.nodeType) {
           /** If node is a document fragment, use temp wrapper to get innerHTML */
           case Node.DOCUMENT_FRAGMENT_NODE:
-            content = $.make('div');
+            content = Dom.make('div');
             content.appendChild(node);
             break;
 
@@ -585,7 +587,7 @@ export default class Paste extends Module {
           event,
         };
       })
-      .filter((data) => !$.isNodeEmpty(data.content) || $.isSingleTag(data.content));
+      .filter((data) => !Dom.isNodeEmpty(data.content) || Dom.isSingleTag(data.content));
   }
 
   /**
@@ -608,7 +610,7 @@ export default class Paste extends Module {
       .split(/\r?\n/)
       .filter((text) => text.trim())
       .map((text) => {
-        const content = $.make('div');
+        const content = Dom.make('div');
 
         content.textContent = text;
 
@@ -640,7 +642,7 @@ export default class Paste extends Module {
     if (
       !currentBlock ||
       dataToInsert.tool !== currentBlock.name ||
-      !$.containsOnlyInlineElements(dataToInsert.content.innerHTML)
+      !Dom.containsOnlyInlineElements(dataToInsert.content.innerHTML)
     ) {
       this.insertBlock(dataToInsert, currentBlock && Tools.isDefault(currentBlock.tool) && currentBlock.isEmpty);
 
@@ -797,7 +799,7 @@ export default class Paste extends Module {
     const toolTags = this.tagsByTool[tool] || [];
 
     const isSubstitutable = tags.includes(element.tagName);
-    const isBlockElement = $.blockElements.includes(element.tagName.toLowerCase());
+    const isBlockElement = Dom.blockElements.includes(element.tagName.toLowerCase());
     const containsAnotherToolTags = Array
       .from(element.children)
       .some(
@@ -805,7 +807,7 @@ export default class Paste extends Module {
       );
 
     const containsBlockElements = Array.from(element.children).some(
-      ({ tagName }) => $.blockElements.includes(tagName.toLowerCase())
+      ({ tagName }) => Dom.blockElements.includes(tagName.toLowerCase())
     );
 
     /** Append inline elements to previous fragment */
@@ -837,7 +839,7 @@ export default class Paste extends Module {
     let elementNodeProcessingResult: Node[] | void;
 
     const reducer = (nodes: Node[], node: Node): Node[] => {
-      if ($.isEmpty(node) && !$.isSingleTag(node as HTMLElement)) {
+      if (Dom.isEmpty(node) && !Dom.isSingleTag(node as HTMLElement)) {
         return nodes;
       }
 
@@ -845,7 +847,7 @@ export default class Paste extends Module {
 
       let destNode: Node = new DocumentFragment();
 
-      if (lastNode && $.isFragment(lastNode)) {
+      if (lastNode && Dom.isFragment(lastNode)) {
         destNode = nodes.pop();
       }
 

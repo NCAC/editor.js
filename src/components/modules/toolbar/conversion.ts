@@ -1,10 +1,10 @@
-import Module from '../../__module';
-import $ from '../../dom';
+import { Module } from '../../__module';
+import { Dom } from '../../dom';
 import { BlockToolConstructable } from '../../../../types';
 import * as _ from '../../utils';
 import { SavedData } from '../../../../types/data-formats';
-import Flipper from '../../flipper';
-import I18n from '../../i18n';
+import { Flipper } from '../../flipper';
+import { I18nConstructor } from '../../i18n';
 import { I18nInternalNS } from '../../i18n/namespace-internal';
 
 /**
@@ -18,7 +18,9 @@ interface ConversionToolbarNodes {
 /**
  * Block Converter
  */
-export default class ConversionToolbar extends Module<ConversionToolbarNodes> {
+export class ConversionToolbar extends Module<ConversionToolbarNodes> {
+
+  public static readonly displayName = 'ConversionToolbar';
   /**
    * CSS getter
    */
@@ -65,14 +67,14 @@ export default class ConversionToolbar extends Module<ConversionToolbarNodes> {
    * Create UI of Conversion Toolbar
    */
   public make(): HTMLElement {
-    this.nodes.wrapper = $.make('div', [
+    this.nodes.wrapper = Dom.make('div', [
       ConversionToolbar.CSS.conversionToolbarWrapper,
       ...(this.isRtl ? [ this.Editor.UI.CSS.editorRtlFix ] : []),
     ]);
-    this.nodes.tools = $.make('div', ConversionToolbar.CSS.conversionToolbarTools);
+    this.nodes.tools = Dom.make('div', ConversionToolbar.CSS.conversionToolbarTools);
 
-    const label = $.make('div', ConversionToolbar.CSS.conversionToolbarLabel, {
-      textContent: I18n.ui(I18nInternalNS.ui.inlineToolbar.converter, 'Convert to'),
+    const label = Dom.make('div', ConversionToolbar.CSS.conversionToolbarLabel, {
+      textContent: I18nConstructor.ui(I18nInternalNS.ui.inlineToolbar.converter, 'Convert to'),
     });
 
     /**
@@ -85,8 +87,8 @@ export default class ConversionToolbar extends Module<ConversionToolbarNodes> {
      */
     this.enableFlipper();
 
-    $.append(this.nodes.wrapper, label);
-    $.append(this.nodes.wrapper, this.nodes.tools);
+    Dom.append(this.nodes.wrapper, label);
+    Dom.append(this.nodes.wrapper, this.nodes.tools);
 
     return this.nodes.wrapper;
   }
@@ -313,16 +315,16 @@ export default class ConversionToolbar extends Module<ConversionToolbarNodes> {
    * @param {string} title - button title
    */
   private addTool(toolName: string, toolIcon: string, title: string): void {
-    const tool = $.make('div', [ ConversionToolbar.CSS.conversionTool ]);
-    const icon = $.make('div', [ ConversionToolbar.CSS.conversionToolIcon ]);
+    const tool = Dom.make('div', [ ConversionToolbar.CSS.conversionTool ]);
+    const icon = Dom.make('div', [ ConversionToolbar.CSS.conversionToolIcon ]);
 
     tool.dataset.tool = toolName;
     icon.innerHTML = toolIcon;
 
-    $.append(tool, icon);
-    $.append(tool, $.text(I18n.t(I18nInternalNS.toolNames, title || _.capitalize(toolName))));
+    Dom.append(tool, icon);
+    Dom.append(tool, Dom.text(I18nConstructor.t(I18nInternalNS.toolNames, title || _.capitalize(toolName))));
 
-    $.append(this.nodes.tools, tool);
+    Dom.append(this.nodes.tools, tool);
     this.tools[toolName] = tool;
 
     this.Editor.Listeners.on(tool, 'click', async () => {

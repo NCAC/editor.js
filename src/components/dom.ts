@@ -3,7 +3,7 @@ import * as _ from './utils';
 /**
  * DOM manipulations helper
  */
-export default class Dom {
+export class Dom {
   /**
    * Check if passed tag has no closed tag
    *

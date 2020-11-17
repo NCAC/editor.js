@@ -1,4 +1,4 @@
-import Module from '../__module';
+import { Module } from '../__module';
 import { CriticalError } from '../errors/critical';
 
 /**
@@ -12,7 +12,9 @@ import { CriticalError } from '../errors/critical';
  * @typedef {ReadOnly} ReadOnly
  * @property {boolean} readOnlyEnabled - read-only state
  */
-export default class ReadOnly extends Module {
+export class ReadOnly extends Module {
+
+  public static readonly displayName = 'ReadOnly';
   /**
    * Array of tools name which don't support read-only mode
    */

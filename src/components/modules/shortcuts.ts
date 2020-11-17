@@ -3,7 +3,7 @@ import Shortcut from '@codexteam/shortcuts';
 /**
  * Contains keyboard and mouse events binded on each Block by Block Manager
  */
-import Module from '../__module';
+import { Module } from '../__module';
 
 /**
  * ShortcutData interface
@@ -33,7 +33,9 @@ export interface ShortcutData {
  *
  * Internal Shortcuts Module
  */
-export default class Shortcuts extends Module {
+export class Shortcuts extends Module {
+
+  public static readonly displayName = 'Shortcuts';
   /**
    * All registered shortcuts
    *

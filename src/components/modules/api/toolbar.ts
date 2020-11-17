@@ -1,11 +1,13 @@
 import { Toolbar } from '../../../../types/api';
-import Module from '../../__module';
+import { Module } from '../../__module';
 
 /**
  * @class ToolbarAPI
  * Provides methods for working with the Toolbar
  */
-export default class ToolbarAPI extends Module {
+export class ToolbarAPI extends Module {
+
+  public static readonly displayName = 'ToolbarAPI';
   /**
    * Available methods
    *

@@ -1,12 +1,12 @@
-import Dom from './dom';
+import { Dom } from './dom';
 import * as _ from './utils';
-import SelectionUtils from './selection';
+import { SelectionUtils } from './selection';
 
 /**
  * Iterator above passed Elements list.
  * Each next or previous action adds provides CSS-class and sets cursor to this item
  */
-export default class DomIterator {
+export class DomIterator {
   /**
    * This is a static property that defines iteration directions
    *

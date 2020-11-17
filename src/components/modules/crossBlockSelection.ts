@@ -1,12 +1,15 @@
-import Module from '../__module';
-import Block from '../block';
-import SelectionUtils from '../selection';
+import { Module } from '../__module';
+import { Block } from '../block';
+import { SelectionUtils } from '../selection';
 import * as _ from '../utils';
 
 /**
  *
  */
-export default class CrossBlockSelection extends Module {
+export class CrossBlockSelection extends Module {
+
+
+  public static readonly displayName = 'CrossBlockSelection';
   /**
    * Block where selection is started
    */

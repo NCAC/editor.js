@@ -1,4 +1,4 @@
-import Module from '../__module';
+import { Module } from '../__module';
 
 /**
  * @module eventDispatcher
@@ -13,7 +13,9 @@ import Module from '../__module';
  * @typedef {Events} Events
  * @property {object} subscribers - all subscribers grouped by event name
  */
-export default class Events extends Module {
+export class Events extends Module {
+
+  public static readonly displayName = 'Events';
   /**
    * Object with events` names as key and array of callback functions as value
    *

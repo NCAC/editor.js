@@ -1,10 +1,12 @@
 import { Styles } from '../../../../types/api';
-import Module from '../../__module';
+import { Module } from '../../__module';
 
 /**
  *
  */
-export default class StylesAPI extends Module {
+export class StylesAPI extends Module {
+
+  public static readonly displayName = 'StylesAPI';
   /**
    * Exported classes
    */

@@ -5,18 +5,20 @@
  * @module BlockSelection
  * @version 1.0.0
  */
-import Module from '../__module';
-import Block from '../block';
+import { Module } from '../__module';
+import { Block } from '../block';
 import * as _ from '../utils';
-import $ from '../dom';
+import { Dom } from '../dom';
 
-import SelectionUtils from '../selection';
+import { SelectionUtils } from '../selection';
 import { SanitizerConfig } from '../../../types/configs';
 
 /**
  *
  */
-export default class BlockSelection extends Module {
+export class BlockSelection extends Module {
+
+  public static readonly displayName = 'BlockSelection';
   /**
    * Sometimes .anyBlockSelected can be called frequently,
    * for example at ui@selectionChange (to clear native browser selection in CBS)
@@ -291,14 +293,14 @@ export default class BlockSelection extends Module {
      */
     e.preventDefault();
 
-    const fakeClipboard = $.make('div');
+    const fakeClipboard = Dom.make('div');
 
     this.selectedBlocks.forEach((block) => {
       /**
        * Make <p> tag that holds clean HTML
        */
       const cleanHTML = this.Editor.Sanitizer.clean(block.holder.innerHTML, this.sanitizerConfig);
-      const fragment = $.make('p');
+      const fragment = Dom.make('p');
 
       fragment.innerHTML = cleanHTML;
       fakeClipboard.appendChild(fragment);
@@ -377,7 +379,7 @@ export default class BlockSelection extends Module {
     this.Editor.RectangleSelection.clearSelection();
 
     /** allow default selection on native inputs */
-    if ($.isNativeInput(event.target) && !this.readyToBlockSelection) {
+    if (Dom.isNativeInput(event.target) && !this.readyToBlockSelection) {
       this.readyToBlockSelection = true;
 
       return;

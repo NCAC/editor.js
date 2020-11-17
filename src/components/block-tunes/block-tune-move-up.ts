@@ -4,13 +4,13 @@
  *
  * @copyright <CodeX Team> 2018
  */
-import $ from '../dom';
+import { Dom } from '../dom';
 import { API, BlockTune } from '../../../types';
 
 /**
  *
  */
-export default class MoveUpTune implements BlockTune {
+export class MoveUpTune implements BlockTune {
   /**
    * Property that contains Editor.js API methods
    *
@@ -44,9 +44,9 @@ export default class MoveUpTune implements BlockTune {
    * @returns {HTMLElement}
    */
   public render(): HTMLElement {
-    const moveUpButton = $.make('div', [this.CSS.button, this.CSS.wrapper], {});
+    const moveUpButton = Dom.make('div', [this.CSS.button, this.CSS.wrapper], {});
 
-    moveUpButton.appendChild($.svg('arrow-up', 14, 14));
+    moveUpButton.appendChild(Dom.svg('arrow-up', 14, 14));
     this.api.listeners.on(
       moveUpButton,
       'click',

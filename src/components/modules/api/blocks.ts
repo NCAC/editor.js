@@ -1,14 +1,16 @@
 import { BlockAPI as BlockAPIInterface, Blocks } from '../../../../types/api';
 import { BlockToolData, OutputData, ToolConfig } from '../../../../types';
 import * as _ from './../../utils';
-import BlockAPI from '../../block/api';
-import Module from '../../__module';
+import { BlockAPI } from '../../block/api';
+import { Module } from '../../__module';
 
 /**
  * @class BlocksAPI
  * provides with methods working with Block
  */
-export default class BlocksAPI extends Module {
+export class BlocksAPI extends Module {
+
+  public static readonly displayName = 'BlocksAPI';
   /**
    * Available methods
    *

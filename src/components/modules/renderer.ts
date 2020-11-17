@@ -1,4 +1,4 @@
-import Module from '../__module';
+import { Module } from '../__module';
 import * as _ from '../utils';
 import { BlockToolConstructable, OutputBlockData } from '../../../types';
 
@@ -10,7 +10,9 @@ import { BlockToolConstructable, OutputBlockData } from '../../../types';
  *
  * @version 2.0.0
  */
-export default class Renderer extends Module {
+export class Renderer extends Module {
+
+  public static readonly displayName = 'Renderer';
   /**
    * @typedef {object} RendererBlocks
    * @property {string} type - tool name

@@ -1,10 +1,12 @@
-import SelectionUtils from '../selection';
+import { SelectionUtils } from '../selection';
 
-import Module from '../__module';
+import { Module } from '../__module';
 /**
  *
  */
-export default class DragNDrop extends Module {
+export class DragNDrop extends Module {
+
+  public static readonly displayName = 'DragNDrop';
   /**
    * If drag has been started at editor, we save it
    *

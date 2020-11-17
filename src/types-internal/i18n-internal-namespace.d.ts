@@ -1,6 +1,6 @@
 /**
-* Decorator above the type object
-*/
+  * Decorator above the type object
+  */
 type Indexed<T> = { [key: string]: T };
 
 /**

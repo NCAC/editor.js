@@ -10,7 +10,7 @@ type DictKeys = LeavesDictKeys<typeof defaultDictionary>;
 /**
  * This class will responsible for the translation through the language dictionary
  */
-export default class I18n {
+export class I18nConstructor {
   /**
    * Property that stores messages dictionary
    */
@@ -26,7 +26,7 @@ export default class I18n {
    * @param dictKey - dictionary key. Better to use default locale original text
    */
   public static ui(internalNamespace: string, dictKey: DictKeys): string {
-    return I18n._t(internalNamespace, dictKey);
+    return I18nConstructor._t(internalNamespace, dictKey);
   }
 
   /**
@@ -37,7 +37,7 @@ export default class I18n {
    * @param dictKey - dictionary key. Better to use default locale original text
    */
   public static t(namespace: string, dictKey: string): string {
-    return I18n._t(namespace, dictKey);
+    return I18nConstructor._t(namespace, dictKey);
   }
 
   /**
@@ -46,7 +46,7 @@ export default class I18n {
    * @param dictionary - new messages list to override default
    */
   public static setDictionary(dictionary: I18nDictionary): void {
-    I18n.currentDictionary = dictionary;
+    I18nConstructor.currentDictionary = dictionary;
   }
 
   /**
@@ -57,7 +57,7 @@ export default class I18n {
    * @param dictKey - dictionary key. Better to use default locale original text
    */
   private static _t(namespace: string, dictKey: string): string {
-    const section = I18n.getNamespace(namespace);
+    const section = I18nConstructor.getNamespace(namespace);
 
     /**
      * For Console Message to Check Section is defined or not
@@ -87,6 +87,6 @@ export default class I18n {
       }
 
       return section[part];
-    }, I18n.currentDictionary);
+    }, I18nConstructor.currentDictionary);
   }
 }

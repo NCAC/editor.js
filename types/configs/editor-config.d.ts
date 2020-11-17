@@ -1,7 +1,7 @@
-import {ToolConstructable, ToolSettings} from '../tools';
-import {API, LogLevels, OutputData} from '../index';
-import {SanitizerConfig} from './sanitizer-config';
-import {I18nConfig} from './i18n-config';
+import { ToolConstructable, ToolSettings } from '../tools';
+import { API, LogLevels, OutputData } from '../index';
+import { SanitizerConfig } from './sanitizer-config';
+import { I18nConfig } from './i18n-config';
 
 export interface EditorConfig {
   /**

@@ -9,13 +9,13 @@ import sprite from '../../../dist/sprite.svg';
  *
  * @type {UI}
  */
-import Module from '../__module';
-import $ from '../dom';
+import {Module} from '../__module';
+import { Dom } from '../dom';
 import * as _ from '../utils';
 
-import Selection from '../selection';
-import Block from '../block';
-import Flipper from '../flipper';
+import { SelectionUtils } from '../selection';
+import { Block } from '../block';
+import { Flipper } from '../flipper';
 
 /**
  * HTML Elements used for UI
@@ -45,7 +45,9 @@ interface UINodes {
  * @property {Element} nodes.wrapper  - <codex-editor>
  * @property {Element} nodes.redactor - <ce-redactor>
  */
-export default class UI extends Module<UINodes> {
+export class UI extends Module<UINodes> {
+
+  public static readonly displayName = 'UI';
   /**
    * Editor.js UI CSS class names
    *
@@ -122,7 +124,7 @@ export default class UI extends Module<UINodes> {
    * Adds loader to editor while content is not ready
    */
   public addLoader(): void {
-    this.nodes.loader = $.make('div', this.CSS.editorLoader);
+    this.nodes.loader = Dom.make('div', this.CSS.editorLoader);
     this.nodes.wrapper.prepend(this.nodes.loader);
     this.nodes.redactor.classList.add(this.CSS.editorZoneHidden);
   }
@@ -162,7 +164,7 @@ export default class UI extends Module<UINodes> {
     /**
      * Load and append CSS
      */
-    this.loadStyles();
+    // this.loadStyles();
   }
 
   /**
@@ -261,16 +263,16 @@ export default class UI extends Module<UINodes> {
      *
      * @type {Element}
      */
-    this.nodes.holder = $.getHolder(this.config.holder);
+    this.nodes.holder = Dom.getHolder(this.config.holder);
 
     /**
      * Create and save main UI elements
      */
-    this.nodes.wrapper = $.make('div', [
+    this.nodes.wrapper = Dom.make('div', [
       this.CSS.editorWrapper,
       ...(this.isRtl ? [ this.CSS.editorRtlFix ] : []),
     ]);
-    this.nodes.redactor = $.make('div', this.CSS.editorZone);
+    this.nodes.redactor = Dom.make('div', this.CSS.editorZone);
 
     /**
      * If Editor has injected into the narrow container, enable Narrow Mode
@@ -296,28 +298,28 @@ export default class UI extends Module<UINodes> {
      * Load CSS
      */
     // eslint-disable-next-line @typescript-eslint/no-var-requires
-    const styles = require('../../styles/main.css');
-    const styleTagId = 'editor-js-styles';
+    // const styles = require('../../styles/main.css');
+    // const styleTagId = 'editor-js-styles';
 
     /**
      * Do not append styles again if they are already on the page
      */
-    if ($.get(styleTagId)) {
-      return;
-    }
+    // if ($.get(styleTagId)) {
+    //   return;
+    // }
 
     /**
      * Make tag
      */
-    const tag = $.make('style', null, {
-      id: styleTagId,
-      textContent: styles.toString(),
-    });
+    // const tag = $.make('style', null, {
+    //   id: styleTagId,
+    //   textContent: styles.toString(),
+    // });
 
     /**
      * Append styles at the top of HEAD tag
      */
-    $.prepend(document.head, tag);
+    // $.prepend(document.head, tag);
   }
 
   /**
@@ -452,7 +454,7 @@ export default class UI extends Module<UINodes> {
      * If any block selected and selection doesn't exists on the page (that means no other editable element is focused),
      * remove selected blocks
      */
-    if (BlockSelection.anyBlockSelected && !Selection.isSelectionExists) {
+    if (BlockSelection.anyBlockSelected && !SelectionUtils.isSelectionExists) {
       const selectionPositionIndex = BlockManager.removeSelectedBlocks();
 
       Caret.setToBlock(BlockManager.insertDefaultBlockAtIndex(selectionPositionIndex, true), Caret.positions.START);
@@ -509,7 +511,7 @@ export default class UI extends Module<UINodes> {
      * If any block selected and selection doesn't exists on the page (that means no other editable element is focused),
      * remove selected blocks
      */
-    if (BlockSelection.anyBlockSelected && !Selection.isSelectionExists) {
+    if (BlockSelection.anyBlockSelected && !SelectionUtils.isSelectionExists) {
       /** Clear selection */
       BlockSelection.clearSelection(event);
 
@@ -573,7 +575,7 @@ export default class UI extends Module<UINodes> {
      * Do not fire check on clicks at the Inline Toolbar buttons
      */
     const target = event.target as HTMLElement;
-    const clickedInsideOfEditor = this.nodes.holder.contains(target) || Selection.isAtEditor;
+    const clickedInsideOfEditor = this.nodes.holder.contains(target) || SelectionUtils.isAtEditor;
 
     if (!clickedInsideOfEditor) {
       /**
@@ -664,7 +666,7 @@ export default class UI extends Module<UINodes> {
    *      - otherwise, add a new empty Block and set a Caret to that
    */
   private redactorClicked(event: MouseEvent): void {
-    if (!Selection.isCollapsed) {
+    if (!SelectionUtils.isCollapsed) {
       return;
     }
 
@@ -680,7 +682,7 @@ export default class UI extends Module<UINodes> {
     const element = event.target as Element;
     const ctrlKey = event.metaKey || event.ctrlKey;
 
-    if ($.isAnchor(element) && ctrlKey) {
+    if (Dom.isAnchor(element) && ctrlKey) {
       stopPropagation();
 
       const href = element.getAttribute('href');
@@ -726,12 +728,12 @@ export default class UI extends Module<UINodes> {
    */
   private selectionChanged(event: Event): void {
     const { CrossBlockSelection, BlockSelection } = this.Editor;
-    const focusedElement = Selection.anchorElement as Element;
+    const focusedElement = SelectionUtils.anchorElement as Element;
 
     if (CrossBlockSelection.isCrossBlockSelectionStarted) {
       // Removes all ranges when any Block is selected
       if (BlockSelection.anyBlockSelected) {
-        Selection.get().removeAllRanges();
+        SelectionUtils.get().removeAllRanges();
       }
     }
 
@@ -760,12 +762,12 @@ export default class UI extends Module<UINodes> {
    * Append prebuilt sprite with SVG icons
    */
   private appendSVGSprite(): void {
-    const spriteHolder = $.make('div');
+    const spriteHolder = Dom.make('div');
 
     spriteHolder.hidden = true;
     spriteHolder.style.display = 'none';
-    spriteHolder.innerHTML = sprite;
+    spriteHolder.innerHTML = (sprite as unknown as string);
 
-    $.append(this.nodes.wrapper, spriteHolder);
+    Dom.append(this.nodes.wrapper, spriteHolder);
   }
 }

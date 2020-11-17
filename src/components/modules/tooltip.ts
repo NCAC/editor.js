@@ -1,5 +1,5 @@
 /* eslint-disable jsdoc/no-undefined-types */
-import Module from '../__module';
+import { Module } from '../__module';
 
 /**
  * Use external module CodeX Tooltip
@@ -12,7 +12,9 @@ import { ModuleConfig } from '../../types-internal/module-config';
  *
  * Decorates any tooltip module like adapter
  */
-export default class Tooltip extends Module {
+export class Tooltip extends Module {
+
+  public static readonly displayName = 'Tooltip';
   /**
    * Tooltips lib: CodeX Tooltips
    *

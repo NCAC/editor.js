@@ -1,12 +1,14 @@
-import SelectionUtils from '../../selection';
+import { SelectionUtils } from '../../selection';
 import { Selection as SelectionAPIInterface } from '../../../../types/api';
-import Module from '../../__module';
+import { Module } from '../../__module';
 
 /**
  * @class SelectionAPI
  * Provides with methods working with SelectionUtils
  */
-export default class SelectionAPI extends Module {
+export class SelectionAPI extends Module {
+
+  public static readonly displayName = 'SelectionAPI';
   /**
    * Available methods
    *

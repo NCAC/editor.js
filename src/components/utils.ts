@@ -2,7 +2,7 @@
  * Class Util
  */
 
-import Dom from './dom';
+import { Dom } from './dom';
 
 /**
  * Possible log levels
@@ -117,7 +117,7 @@ function _log(
     argsToPass.push(args);
   }
 
-  const editorLabelText = `Editor.js ${VERSION}`;
+  const editorLabelText = 'Editor.js 2.19.1';
   const editorLabelStyle = `line-height: 1em;
             color: #006FEA;
             display: inline-block;

@@ -16,7 +16,7 @@
  * {@link SanitizerConfig}
  */
 
-import Module from '../__module';
+import { Module } from '../__module';
 import * as _ from '../utils';
 
 /**
@@ -42,7 +42,9 @@ import { SavedData } from '../../../types/data-formats';
 /**
  *
  */
-export default class Sanitizer extends Module {
+export class Sanitizer extends Module {
+
+  public static readonly displayName = 'Sanitizer';
   /**
    * Memoize tools config
    */

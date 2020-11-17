@@ -1,10 +1,10 @@
-import Module from '../../__module';
-import $ from '../../dom';
+import { Module } from '../../__module';
+import { Dom } from '../../dom';
 import * as _ from '../../utils';
 import { BlockToolConstructable, ToolConstructable } from '../../../../types';
-import Flipper from '../../flipper';
+import { Flipper } from '../../flipper';
 import { BlockToolAPI } from '../../block';
-import I18n from '../../i18n';
+import { I18nConstructor } from '../../i18n';
 import { I18nInternalNS } from '../../i18n/namespace-internal';
 
 /**
@@ -25,7 +25,9 @@ interface ToolboxNodes {
  * @property {object} CSS     - CSS class names
  *
  */
-export default class Toolbox extends Module<ToolboxNodes> {
+export class Toolbox extends Module<ToolboxNodes> {
+
+  public static readonly displayName = 'Toolbox';
   /**
    * Current module HTML Elements
    */
@@ -86,7 +88,7 @@ export default class Toolbox extends Module<ToolboxNodes> {
    * Makes the Toolbox
    */
   public make(): void {
-    this.nodes.toolbox = $.make('div', this.CSS.toolbox);
+    this.nodes.toolbox = Dom.make('div', this.CSS.toolbox);
 
     this.addTools();
     this.enableFlipper();
@@ -212,12 +214,12 @@ export default class Toolbox extends Module<ToolboxNodes> {
       return;
     }
 
-    const button = $.make('li', [ this.CSS.toolboxButton ]);
+    const button = Dom.make('li', [ this.CSS.toolboxButton ]);
 
     button.dataset.tool = toolName;
     button.innerHTML = (userToolboxSettings && userToolboxSettings.icon) || toolToolboxSettings.icon;
 
-    $.append(this.nodes.toolbox, button);
+    Dom.append(this.nodes.toolbox, button);
 
     this.nodes.toolbox.appendChild(button);
     this.nodes.buttons.push(button);
@@ -278,11 +280,11 @@ export default class Toolbox extends Module<ToolboxNodes> {
     const toolSettings = this.Editor.Tools.getToolSettings(toolName);
     const toolboxSettings = this.Editor.Tools.available[toolName][this.Editor.Tools.INTERNAL_SETTINGS.TOOLBOX] || {};
     const userToolboxSettings = toolSettings.toolbox || {};
-    const name = I18n.t(I18nInternalNS.toolNames, userToolboxSettings.title || toolboxSettings.title || toolName);
+    const name = I18nConstructor.t(I18nInternalNS.toolNames, userToolboxSettings.title || toolboxSettings.title || toolName);
 
     let shortcut = this.getToolShortcut(toolName, tool);
 
-    const tooltip = $.make('div', this.CSS.buttonTooltip);
+    const tooltip = Dom.make('div', this.CSS.buttonTooltip);
     const hint = document.createTextNode(_.capitalize(name));
 
     tooltip.appendChild(hint);
@@ -290,7 +292,7 @@ export default class Toolbox extends Module<ToolboxNodes> {
     if (shortcut) {
       shortcut = _.beautifyShortcut(shortcut);
 
-      tooltip.appendChild($.make('div', this.CSS.buttonShortcut, {
+      tooltip.appendChild(Dom.make('div', this.CSS.buttonShortcut, {
         textContent: shortcut,
       }));
     }

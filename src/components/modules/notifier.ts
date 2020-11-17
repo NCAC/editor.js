@@ -1,4 +1,4 @@
-import Module from '../__module';
+import { Module } from '../__module';
 
 /**
  * Use external package module for notifications
@@ -10,7 +10,9 @@ import notifier, { ConfirmNotifierOptions, NotifierOptions, PromptNotifierOption
 /**
  * Notifier module
  */
-export default class Notifier extends Module {
+export class Notifier extends Module {
+
+  public static readonly displayName = 'Notifier';
   /**
    * Show web notification
    *

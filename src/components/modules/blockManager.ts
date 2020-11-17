@@ -6,11 +6,11 @@
  *
  * @version 2.0.0
  */
-import Block, { BlockToolAPI } from '../block';
-import Module from '../__module';
-import $ from '../dom';
+import { Block, BlockToolAPI } from '../block';
+import { Module } from '../__module';
+import { Dom } from '../dom';
 import * as _ from '../utils';
-import Blocks from '../blocks';
+import { Blocks } from '../blocks';
 import { BlockToolConstructable, BlockToolData, PasteEvent } from '../../../types';
 
 /**
@@ -18,7 +18,9 @@ import { BlockToolConstructable, BlockToolData, PasteEvent } from '../../../type
  * @property {number} currentBlockIndex - Index of current working block
  * @property {Proxy} _blocks - Proxy for Blocks instance {@link Blocks}
  */
-export default class BlockManager extends Module {
+export class BlockManager extends Module {
+
+  public static readonly displayName = 'BlockManager';
   /**
    * Returns current Block index
    *
@@ -327,7 +329,7 @@ export default class BlockManager extends Module {
     try {
       block.call(BlockToolAPI.ON_PASTE, pasteEvent);
     } catch (e) {
-      _.log(`${toolName}: onPaste callback call is failed`, 'error', e);
+      _.log(`Dom{toolName}: onPaste callback call is failed`, 'error', e);
     }
 
     return block;
@@ -478,7 +480,7 @@ export default class BlockManager extends Module {
    */
   public split(): Block {
     const extractedFragment = this.Editor.Caret.extractFragmentFromCaretPosition();
-    const wrapper = $.make('div');
+    const wrapper = Dom.make('div');
 
     wrapper.appendChild(extractedFragment as DocumentFragment);
 
@@ -486,7 +488,7 @@ export default class BlockManager extends Module {
      * @todo make object in accordance with Tool
      */
     const data = {
-      text: $.isEmpty(wrapper) ? '' : wrapper.innerHTML,
+      text: Dom.isEmpty(wrapper) ? '' : wrapper.innerHTML,
     };
 
     /**
@@ -516,12 +518,12 @@ export default class BlockManager extends Module {
    * @returns {Block}
    */
   public getBlock(element: HTMLElement): Block {
-    if (!$.isElement(element) as boolean) {
+    if (!Dom.isElement(element) as boolean) {
       element = element.parentNode as HTMLElement;
     }
 
     const nodes = this._blocks.nodes,
-        firstLevelBlock = element.closest(`.${Block.CSS.wrapper}`),
+        firstLevelBlock = element.closest(`.Dom{Block.CSS.wrapper}`),
         index = nodes.indexOf(firstLevelBlock as HTMLElement);
 
     if (index >= 0) {
@@ -567,7 +569,7 @@ export default class BlockManager extends Module {
     /**
      * If node is Text TextNode
      */
-    if (!$.isElement(childNode)) {
+    if (!Dom.isElement(childNode)) {
       childNode = childNode.parentNode;
     }
 
@@ -603,11 +605,11 @@ export default class BlockManager extends Module {
     /**
      * If node is Text TextNode
      */
-    if (!$.isElement(childNode)) {
+    if (!Dom.isElement(childNode)) {
       childNode = childNode.parentNode;
     }
 
-    const firstLevelBlock = (childNode as HTMLElement).closest(`.${Block.CSS.wrapper}`);
+    const firstLevelBlock = (childNode as HTMLElement).closest(`.Dom{Block.CSS.wrapper}`);
 
     return this.blocks.find((block) => block.holder === firstLevelBlock);
   }

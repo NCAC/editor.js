@@ -1,11 +1,13 @@
 import { Caret } from '../../../../types/api';
-import Module from '../../__module';
+import { Module } from '../../__module';
 
 /**
  * @class CaretAPI
  * provides with methods to work with caret
  */
-export default class CaretAPI extends Module {
+export class CaretAPI extends Module {
+
+  public static readonly displayName = 'CaretAPI';
   /**
    * Available methods
    *

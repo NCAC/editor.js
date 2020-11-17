@@ -1,10 +1,10 @@
-import Module from '../../__module';
-import $ from '../../dom';
-import SelectionUtils from '../../selection';
+import { Module } from '../../__module';
+import { Dom } from '../../dom';
+import { SelectionUtils } from '../../selection';
 import * as _ from '../../utils';
 import { InlineTool, InlineToolConstructable, ToolConstructable, ToolSettings } from '../../../../types';
-import Flipper from '../../flipper';
-import I18n from '../../i18n';
+import { Flipper } from '../../flipper';
+import { I18nConstructor } from '../../i18n';
 import { I18nInternalNS } from '../../i18n/namespace-internal';
 
 /**
@@ -30,7 +30,9 @@ interface InlineToolbarNodes {
  * |   B  i [link] [mark]   |
  * |________________________|
  */
-export default class InlineToolbar extends Module<InlineToolbarNodes> {
+export class InlineToolbar extends Module<InlineToolbarNodes> {
+
+  public static readonly displayName = 'InlineToolbar';
   /**
    * CSS styles
    */
@@ -345,16 +347,16 @@ export default class InlineToolbar extends Module<InlineToolbarNodes> {
    * Making DOM
    */
   private make(): void {
-    this.nodes.wrapper = $.make('div', [
+    this.nodes.wrapper = Dom.make('div', [
       this.CSS.inlineToolbar,
       ...(this.isRtl ? [ this.Editor.UI.CSS.editorRtlFix ] : []),
     ]);
     /**
      * Creates a different wrapper for toggler and buttons.
      */
-    this.nodes.togglerAndButtonsWrapper = $.make('div', this.CSS.togglerAndButtonsWrapper);
-    this.nodes.buttons = $.make('div', this.CSS.buttonsWrapper);
-    this.nodes.actions = $.make('div', this.CSS.actionsWrapper);
+    this.nodes.togglerAndButtonsWrapper = Dom.make('div', this.CSS.togglerAndButtonsWrapper);
+    this.nodes.buttons = Dom.make('div', this.CSS.buttonsWrapper);
+    this.nodes.actions = Dom.make('div', this.CSS.actionsWrapper);
 
     // To prevent reset of a selection when click on the wrapper
     this.Editor.Listeners.on(this.nodes.wrapper, 'mousedown', (event) => {
@@ -370,11 +372,11 @@ export default class InlineToolbar extends Module<InlineToolbarNodes> {
     /**
      * Append the intermediary wrapper which contains toggler and buttons and button actions.
      */
-    $.append(this.nodes.wrapper, [this.nodes.togglerAndButtonsWrapper, this.nodes.actions]);
+    Dom.append(this.nodes.wrapper, [this.nodes.togglerAndButtonsWrapper, this.nodes.actions]);
     /**
      * Append the inline toolbar to the editor.
      */
-    $.append(this.Editor.UI.nodes.wrapper, this.nodes.wrapper);
+    Dom.append(this.Editor.UI.nodes.wrapper, this.nodes.wrapper);
 
     /**
      * Add button that will allow switching block type
@@ -385,7 +387,7 @@ export default class InlineToolbar extends Module<InlineToolbarNodes> {
      * Wrapper for the inline tools
      * Will be appended after the Conversion Toolbar toggler
      */
-    $.append(this.nodes.togglerAndButtonsWrapper, this.nodes.buttons);
+    Dom.append(this.nodes.togglerAndButtonsWrapper, this.nodes.buttons);
 
     /**
      * Prepare conversion toolbar.
@@ -427,7 +429,7 @@ export default class InlineToolbar extends Module<InlineToolbarNodes> {
       return false;
     }
 
-    const target = !$.isElement(currentSelection.anchorNode)
+    const target = !Dom.isElement(currentSelection.anchorNode)
       ? currentSelection.anchorNode.parentElement
       : currentSelection.anchorNode;
 
@@ -469,10 +471,10 @@ export default class InlineToolbar extends Module<InlineToolbarNodes> {
    * and prepend it to the buttons list
    */
   private addConversionToggler(): void {
-    this.nodes.conversionToggler = $.make('div', this.CSS.conversionToggler);
-    this.nodes.conversionTogglerContent = $.make('div', this.CSS.conversionTogglerContent);
+    this.nodes.conversionToggler = Dom.make('div', this.CSS.conversionToggler);
+    this.nodes.conversionTogglerContent = Dom.make('div', this.CSS.conversionTogglerContent);
 
-    const icon = $.svg('toggler-down', 13, 13);
+    const icon = Dom.svg('toggler-down', 13, 13);
 
     this.nodes.conversionToggler.appendChild(this.nodes.conversionTogglerContent);
     this.nodes.conversionToggler.appendChild(icon);
@@ -498,7 +500,7 @@ export default class InlineToolbar extends Module<InlineToolbarNodes> {
       });
     });
 
-    this.Editor.Tooltip.onHover(this.nodes.conversionToggler, I18n.ui(I18nInternalNS.ui.inlineToolbar.converter, 'Convert to'), {
+    this.Editor.Tooltip.onHover(this.nodes.conversionToggler, I18nConstructor.ui(I18nInternalNS.ui.inlineToolbar.converter, 'Convert to'), {
       placement: 'top',
       hidingDelay: 100,
     });
@@ -541,7 +543,7 @@ export default class InlineToolbar extends Module<InlineToolbarNodes> {
   private prepareConversionToolbar(): void {
     const ct = this.Editor.ConversionToolbar.make();
 
-    $.append(this.nodes.wrapper, ct);
+    Dom.append(this.nodes.wrapper, ct);
   }
 
   /**
@@ -664,16 +666,16 @@ export default class InlineToolbar extends Module<InlineToolbarNodes> {
     /**
      * Enable tooltip module on button
      */
-    const tooltipContent = $.make('div');
-    const toolTitle = I18n.t(
+    const tooltipContent = Dom.make('div');
+    const toolTitle = I18nConstructor.t(
       I18nInternalNS.toolNames,
       Tools.toolsClasses[toolName][Tools.INTERNAL_SETTINGS.TITLE] || _.capitalize(toolName)
     );
 
-    tooltipContent.appendChild($.text(toolTitle));
+    tooltipContent.appendChild(Dom.text(toolTitle));
 
     if (shortcut) {
-      tooltipContent.appendChild($.make('div', this.CSS.inlineToolbarShortcut, {
+      tooltipContent.appendChild(Dom.make('div', this.CSS.inlineToolbarShortcut, {
         textContent: _.beautifyShortcut(shortcut),
       }));
     }

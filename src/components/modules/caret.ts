@@ -9,16 +9,18 @@
  * @version 2.0.0
  */
 
-import Selection from '../selection';
-import Module from '../__module';
-import Block from '../block';
-import $ from '../dom';
+import { SelectionUtils } from '../selection';
+import { Module } from '../__module';
+import { Block } from '../block';
+import { Dom } from '../dom';
 import * as _ from '../utils';
 
 /**
  * @typedef {Caret} Caret
  */
-export default class Caret extends Module {
+export class Caret extends Module {
+
+  public static readonly displayName = 'Caret';
   /**
    * Allowed caret positions in input
    *
@@ -48,12 +50,12 @@ export default class Caret extends Module {
    * @returns {boolean}
    */
   public get isAtStart(): boolean {
-    const selection = Selection.get();
-    const firstNode = $.getDeepestNode(this.Editor.BlockManager.currentBlock.currentInput);
+    const selection = SelectionUtils.get();
+    const firstNode = Dom.getDeepestNode(this.Editor.BlockManager.currentBlock.currentInput);
     let focusNode = selection.focusNode;
 
     /** In case lastNode is native input */
-    if ($.isNativeInput(firstNode)) {
+    if (Dom.isNativeInput(firstNode)) {
       return (firstNode as HTMLInputElement).selectionEnd === 0;
     }
 
@@ -103,7 +105,7 @@ export default class Caret extends Module {
      *     |adaddad         <-- focus node
      * </div>
      */
-    if ($.isLineBreakTag(firstNode as HTMLElement) || $.isEmpty(firstNode)) {
+    if (Dom.isLineBreakTag(firstNode as HTMLElement) || Dom.isEmpty(firstNode)) {
       const leftSiblings = this.getHigherLevelSiblings(focusNode as HTMLElement, 'left');
       const nothingAtLeft = leftSiblings.every((node) => {
         /**
@@ -112,14 +114,14 @@ export default class Caret extends Module {
          * @see https://github.com/codex-team/editor.js/issues/726
          * We need to allow to delete such linebreaks, so in this case caret IS NOT AT START
          */
-        const regularLineBreak = $.isLineBreakTag(node);
+        const regularLineBreak = Dom.isLineBreakTag(node);
         /**
          * Workaround SHIFT+ENTER in Safari, that creates <div><br></div> instead of <br>
          */
-        const lineBreakInSafari = node.children.length === 1 && $.isLineBreakTag(node.children[0] as HTMLElement);
+        const lineBreakInSafari = node.children.length === 1 && Dom.isLineBreakTag(node.children[0] as HTMLElement);
         const isLineBreak = regularLineBreak || lineBreakInSafari;
 
-        return $.isEmpty(node) && !isLineBreak;
+        return Dom.isEmpty(node) && !isLineBreak;
       });
 
       if (nothingAtLeft && focusOffset === firstLetterPosition) {
@@ -140,13 +142,13 @@ export default class Caret extends Module {
    * @returns {boolean}
    */
   public get isAtEnd(): boolean {
-    const selection = Selection.get();
+    const selection = SelectionUtils.get();
     let focusNode = selection.focusNode;
 
-    const lastNode = $.getDeepestNode(this.Editor.BlockManager.currentBlock.currentInput, true);
+    const lastNode = Dom.getDeepestNode(this.Editor.BlockManager.currentBlock.currentInput, true);
 
     /** In case lastNode is native input */
-    if ($.isNativeInput(lastNode)) {
+    if (Dom.isNativeInput(lastNode)) {
       return (lastNode as HTMLInputElement).selectionEnd === (lastNode as HTMLInputElement).value.length;
     }
 
@@ -183,15 +185,15 @@ export default class Caret extends Module {
      *     <p><b></b></p>   <-- first (and deepest) node is <b></b>
      * </div>
      */
-    if ($.isLineBreakTag(lastNode as HTMLElement) || $.isEmpty(lastNode)) {
+    if (Dom.isLineBreakTag(lastNode as HTMLElement) || Dom.isEmpty(lastNode)) {
       const rightSiblings = this.getHigherLevelSiblings(focusNode as HTMLElement, 'right');
       const nothingAtRight = rightSiblings.every((node, i) => {
         /**
          * If last right sibling is BR isEmpty returns false, but there actually nothing at right
          */
-        const isLastBR = i === rightSiblings.length - 1 && $.isLineBreakTag(node as HTMLElement);
+        const isLastBR = i === rightSiblings.length - 1 && Dom.isLineBreakTag(node as HTMLElement);
 
-        return isLastBR || ($.isEmpty(node) && !$.isLineBreakTag(node));
+        return isLastBR || (Dom.isEmpty(node) && !Dom.isLineBreakTag(node));
       });
 
       if (nothingAtRight && focusOffset === focusNode.textContent.length) {
@@ -244,8 +246,8 @@ export default class Caret extends Module {
       return;
     }
 
-    const nodeToSet = $.getDeepestNode(element, position === this.positions.END);
-    const contentLength = $.getContentLength(nodeToSet);
+    const nodeToSet = Dom.getDeepestNode(element, position === this.positions.END);
+    const contentLength = Dom.getContentLength(nodeToSet);
 
     switch (true) {
       case position === this.positions.START:
@@ -278,7 +280,7 @@ export default class Caret extends Module {
    */
   public setToInput(input: HTMLElement, position: string = this.positions.DEFAULT, offset = 0): void {
     const { currentBlock } = this.Editor.BlockManager;
-    const nodeToSet = $.getDeepestNode(input);
+    const nodeToSet = Dom.getDeepestNode(input);
 
     switch (position) {
       case this.positions.START:
@@ -286,7 +288,7 @@ export default class Caret extends Module {
         break;
 
       case this.positions.END:
-        this.set(nodeToSet as HTMLElement, $.getContentLength(nodeToSet));
+        this.set(nodeToSet as HTMLElement, Dom.getContentLength(nodeToSet));
         break;
 
       default:
@@ -305,7 +307,7 @@ export default class Caret extends Module {
    * @param {number} offset - offset
    */
   public set(element: HTMLElement, offset = 0): void {
-    const { top, bottom } = Selection.setCursor(element, offset);
+    const { top, bottom } = SelectionUtils.setCursor(element, offset);
 
     /** If new cursor position is not visible, scroll to it */
     const { innerHeight } = window;
@@ -346,7 +348,7 @@ export default class Caret extends Module {
    * Extract content fragment of current Block from Caret position to the end of the Block
    */
   public extractFragmentFromCaretPosition(): void|DocumentFragment {
-    const selection = Selection.get();
+    const selection = SelectionUtils.get();
 
     if (selection.rangeCount) {
       const selectRange = selection.getRangeAt(0);
@@ -355,7 +357,7 @@ export default class Caret extends Module {
       selectRange.deleteContents();
 
       if (currentBlockInput) {
-        if ($.isNativeInput(currentBlockInput)) {
+        if (Dom.isNativeInput(currentBlockInput)) {
           /**
            * If input is native text input we need to use it's value
            * Text before the caret stays in the input,
@@ -496,7 +498,7 @@ export default class Caret extends Module {
      * - select shadowed span
      * - use extractContent to remove it from DOM
      */
-    const sel = new Selection();
+    const sel = new SelectionUtils();
 
     sel.expandToTag(shadowCaret as HTMLElement);
 
@@ -516,8 +518,8 @@ export default class Caret extends Module {
   public insertContentAtCaretPosition(content: string): void {
     const fragment = document.createDocumentFragment();
     const wrapper = document.createElement('div');
-    const selection = Selection.get();
-    const range = Selection.range;
+    const selection = SelectionUtils.get();
+    const range = SelectionUtils.range;
 
     wrapper.innerHTML = content;
 

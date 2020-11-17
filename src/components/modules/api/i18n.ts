@@ -1,13 +1,15 @@
 import { I18n } from '../../../../types/api';
-import I18nInternal from '../../i18n';
+import { I18nConstructor } from '../../i18n';
 import { ToolType } from '../tools';
 import { logLabeled } from '../../utils';
-import Module from '../../__module';
+import { Module } from '../../__module';
 
 /**
  * Provides methods for working with i18n
  */
-export default class I18nAPI extends Module {
+export class I18nAPI extends Module {
+
+  public static readonly displayName = 'I18nAPI';
   /**
    * Return namespace section for tool or block tune
    *
@@ -48,7 +50,7 @@ export default class I18nAPI extends Module {
       this.methods,
       {
         t: (dictKey: string): string => {
-          return I18nInternal.t(I18nAPI.getNamespace(toolName, toolType), dictKey);
+          return I18nConstructor.t(I18nAPI.getNamespace(toolName, toolType), dictKey);
         },
       });
   }

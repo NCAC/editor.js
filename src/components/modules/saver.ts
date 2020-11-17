@@ -5,13 +5,12 @@
  * @author Codex Team
  * @version 2.0.0
  */
-import Module from '../__module';
+import { Module } from '../__module';
 import { OutputData } from '../../../types';
 import { ValidatedData } from '../../../types/data-formats';
-import Block from '../block';
+import { Block } from '../block';
 import * as _ from '../utils';
 
-declare const VERSION: string;
 
 /**
  * @classdesc This method reduces all Blocks asyncronically and calls Block's save method to extract data
@@ -20,7 +19,9 @@ declare const VERSION: string;
  * @property {Element} html - Editor HTML content
  * @property {string} json - Editor JSON output
  */
-export default class Saver extends Module {
+export class Saver extends Module {
+
+  public static readonly displayName = 'Saver';
   /**
    * Composes new chain of Promises to fire them alternatelly
    *
@@ -116,7 +117,7 @@ export default class Saver extends Module {
     return {
       time: +new Date(),
       blocks,
-      version: VERSION,
+      version: '2.19.1',
     };
   }
 }

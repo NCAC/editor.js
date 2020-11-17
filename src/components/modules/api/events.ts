@@ -1,11 +1,13 @@
 import { Events } from '../../../../types/api';
-import Module from '../../__module';
+import { Module } from '../../__module';
 
 /**
  * @class EventsAPI
  * provides with methods working with Toolbar
  */
-export default class EventsAPI extends Module {
+export class EventsAPI extends Module {
+
+  public static readonly displayName = 'EventsAPI';
   /**
    * Available methods
    *

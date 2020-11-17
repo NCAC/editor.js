@@ -5,20 +5,22 @@
  * and gives opportunity to handle outside
  */
 
-import Module from '../__module';
+import { Module } from '../__module';
 import * as _ from '../utils';
-import Block from '../block';
+import { Block } from '../block';
 
 /**
  *
  */
-export default class ModificationsObserver extends Module {
+export class ModificationsObserver extends Module {
   /**
    * Debounce Timer
    *
    * @type {number}
    */
   public static readonly DebounceTimer = 450;
+
+  public static readonly displayName = 'ModificationsObserver';
 
   /**
    * MutationObserver instance

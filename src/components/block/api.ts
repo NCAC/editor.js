@@ -1,4 +1,4 @@
-import Block from './index';
+import { Block } from './index';
 import { BlockToolData, ToolConfig } from '../../../types/tools';
 import { SavedData } from '../../../types/data-formats';
 import { BlockAPI as BlockAPIInterface } from '../../../types/api';
@@ -10,7 +10,7 @@ import { BlockAPI as BlockAPIInterface } from '../../../types/api';
  *
  * @param {Block} block - Block to expose
  */
-function BlockAPI(
+export function BlockAPI(
   block: Block
 ): void {
   const blockAPI: BlockAPIInterface = {
@@ -112,5 +112,3 @@ function BlockAPI(
 
   Object.setPrototypeOf(this, blockAPI);
 }
-
-export default BlockAPI;

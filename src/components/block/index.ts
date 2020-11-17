@@ -11,17 +11,17 @@ import {
 } from '../../../types';
 
 import { SavedData } from '../../../types/data-formats';
-import $ from '../dom';
+import { Dom } from '../dom';
 import * as _ from '../utils';
-import ApiModules from '../modules/api';
-import BlockAPI from './api';
+import { API } from '../modules/api';
+import { BlockAPI } from './api';
 import { ToolType } from '../modules/tools';
 
 /** Import default tunes */
-import MoveUpTune from '../block-tunes/block-tune-move-up';
-import DeleteTune from '../block-tunes/block-tune-delete';
-import MoveDownTune from '../block-tunes/block-tune-move-down';
-import SelectionUtils from '../selection';
+import { MoveUpTune } from '../block-tunes/block-tune-move-up';
+import { DeleteTune } from '../block-tunes/block-tune-delete';
+import { MoveDownTune } from '../block-tunes/block-tune-move-down';
+import { SelectionUtils } from '../selection';
 
 /**
  * Interface describes Block class constructor argument
@@ -50,7 +50,7 @@ interface BlockConstructorOptions {
   /**
    * Editor's API methods
    */
-  api: ApiModules;
+  api: API;
 
   /**
    * This flag indicates that the Block should be constructed in the read-only mode.
@@ -90,7 +90,7 @@ export enum BlockToolAPI {
  * @property {HTMLElement} holder - Div element that wraps block content with Tool's content. Has `ce-block` CSS class
  * @property {HTMLElement} pluginsContent - HTML content that returns by Tool's render function
  */
-export default class Block {
+export class Block {
   /**
    * CSS classes for the Block
    *
@@ -152,7 +152,7 @@ export default class Block {
   /**
    * Editor`s API module
    */
-  private readonly api: ApiModules;
+  private readonly api: API;
 
   /**
    * Focused input index
@@ -251,7 +251,7 @@ export default class Block {
       return this.cachedInputs;
     }
 
-    const inputs = $.findAllInputs(this.holder);
+    const inputs = Dom.findAllInputs(this.holder);
 
     /**
      * If inputs amount was changed we need to check if input index is bigger then inputs array length
@@ -368,7 +368,7 @@ export default class Block {
    * @returns {boolean}
    */
   public get isEmpty(): boolean {
-    const emptyText = $.isEmpty(this.pluginsContent);
+    const emptyText = Dom.isEmpty(this.pluginsContent);
     const emptyMedia = !this.hasMedia;
 
     return emptyText && emptyMedia;
@@ -481,7 +481,7 @@ export default class Block {
       for (let child = blockContentNodes.childNodes.length - 1; child >= 0; child--) {
         const contentNode = blockContentNodes.childNodes[child];
 
-        if (!$.isExtensionNode(contentNode)) {
+        if (!Dom.isExtensionNode(contentNode)) {
           return contentNode as HTMLElement;
         }
       }
@@ -619,7 +619,7 @@ export default class Block {
     const tunesElement = document.createDocumentFragment();
 
     this.tunes.forEach((tune) => {
-      $.append(tunesElement, tune.render());
+      Dom.append(tunesElement, tune.render());
     });
 
     return tunesElement;
@@ -635,7 +635,7 @@ export default class Block {
      *
      * If anchorNode is undefined, also use activeElement
      */
-    this.currentInput = $.isNativeInput(document.activeElement) || !SelectionUtils.anchorNode
+    this.currentInput = Dom.isNativeInput(document.activeElement) || !SelectionUtils.anchorNode
       ? document.activeElement
       : SelectionUtils.anchorNode;
   }
@@ -678,8 +678,8 @@ export default class Block {
    * @returns {HTMLDivElement}
    */
   private compose(): HTMLDivElement {
-    const wrapper = $.make('div', Block.CSS.wrapper) as HTMLDivElement,
-        contentNode = $.make('div', Block.CSS.content),
+    const wrapper = Dom.make('div', Block.CSS.wrapper) as HTMLDivElement,
+        contentNode = Dom.make('div', Block.CSS.content),
         pluginsContent = this.tool.render();
 
     contentNode.appendChild(pluginsContent);

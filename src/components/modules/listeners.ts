@@ -1,4 +1,4 @@
-import Module from '../__module';
+import { Module } from '../__module';
 import * as _ from '../utils';
 
 /**
@@ -50,13 +50,15 @@ export interface ListenerData {
  * @typedef {Listeners} Listeners
  * @property {ListenerData[]} allListeners - listeners store
  */
-export default class Listeners extends Module {
+export class Listeners extends Module {
   /**
    * Stores all listeners data to find/remove/process it
    *
    * @type {ListenerData[]}
    */
   private allListeners: ListenerData[] = [];
+
+  public static displayName = 'Listeners';
 
   /**
    * Assigns event listener on element and returns unique identifier

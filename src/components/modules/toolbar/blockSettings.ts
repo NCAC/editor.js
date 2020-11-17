@@ -1,8 +1,8 @@
-import Module from '../../__module';
-import $ from '../../dom';
-import Flipper, { FlipperOptions } from '../../flipper';
+import { Module } from '../../__module';
+import { Dom } from '../../dom';
+import { Flipper, FlipperOptions } from '../../flipper';
 import * as _ from '../../utils';
-import SelectionUtils from '../../selection';
+import { SelectionUtils } from '../../selection';
 
 /**
  * HTML Elements that used for BlockSettings
@@ -24,7 +24,9 @@ interface BlockSettingsNodes {
  *  | ...................... |
  *  |________________________|
  */
-export default class BlockSettings extends Module<BlockSettingsNodes> {
+export class BlockSettings extends Module<BlockSettingsNodes> {
+
+  public static readonly displayName = 'BlockSettings';
   /**
    * Module Events
    *
@@ -89,12 +91,12 @@ export default class BlockSettings extends Module<BlockSettingsNodes> {
    *  - Default Settings [Move, Remove, etc]
    */
   public make(): void {
-    this.nodes.wrapper = $.make('div', this.CSS.wrapper);
+    this.nodes.wrapper = Dom.make('div', this.CSS.wrapper);
 
-    this.nodes.toolSettings = $.make('div', this.CSS.toolSettings);
-    this.nodes.defaultSettings = $.make('div', this.CSS.defaultSettings);
+    this.nodes.toolSettings = Dom.make('div', this.CSS.toolSettings);
+    this.nodes.defaultSettings = Dom.make('div', this.CSS.defaultSettings);
 
-    $.append(this.nodes.wrapper, [this.nodes.toolSettings, this.nodes.defaultSettings]);
+    Dom.append(this.nodes.wrapper, [this.nodes.toolSettings, this.nodes.defaultSettings]);
 
     /**
      * Active leafing by arrows/tab
@@ -203,7 +205,7 @@ export default class BlockSettings extends Module<BlockSettingsNodes> {
 
     const toolSettings = this.nodes.toolSettings.querySelectorAll(
       // Select buttons and inputs
-      `.${StylesAPI.classes.settingsButton}, ${$.allInputsSelector}`
+      `.${StylesAPI.classes.settingsButton}, ${Dom.allInputsSelector}`
     );
     const defaultSettings = this.nodes.defaultSettings.querySelectorAll(`.${this.CSS.button}`);
 
@@ -223,7 +225,7 @@ export default class BlockSettings extends Module<BlockSettingsNodes> {
    */
   private addToolSettings(): void {
     if (_.isFunction(this.Editor.BlockManager.currentBlock.tool.renderSettings)) {
-      $.append(this.nodes.toolSettings, this.Editor.BlockManager.currentBlock.tool.renderSettings());
+      Dom.append(this.nodes.toolSettings, this.Editor.BlockManager.currentBlock.tool.renderSettings());
     }
   }
 
@@ -231,7 +233,7 @@ export default class BlockSettings extends Module<BlockSettingsNodes> {
    * Add default settings
    */
   private addDefaultSettings(): void {
-    $.append(this.nodes.defaultSettings, this.Editor.BlockManager.currentBlock.renderTunes());
+    Dom.append(this.nodes.defaultSettings, this.Editor.BlockManager.currentBlock.renderTunes());
   }
 
   /**
@@ -248,7 +250,7 @@ export default class BlockSettings extends Module<BlockSettingsNodes> {
         /**
          * If focused item is editable element, close block settings
          */
-        if (focusedItem && $.canSetCaret(focusedItem)) {
+        if (focusedItem && Dom.canSetCaret(focusedItem)) {
           this.close();
 
           return;

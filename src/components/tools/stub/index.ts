@@ -1,4 +1,4 @@
-import $ from '../../dom';
+import { Dom } from '../../dom';
 import { API, BlockTool, BlockToolData, BlockToolConstructorOptions } from '../../../../types';
 
 export interface StubData extends BlockToolData {
@@ -10,7 +10,7 @@ export interface StubData extends BlockToolData {
  * This tool will be shown in place of a block without corresponding plugin
  * It will store its data inside and pass it back with article saving
  */
-export default class Stub implements BlockTool {
+export class Stub implements BlockTool {
   /**
    * Notify core that tool supports read-only mode
    */
@@ -91,13 +91,13 @@ export default class Stub implements BlockTool {
    * @returns {HTMLElement}
    */
   private make(): HTMLElement {
-    const wrapper = $.make('div', this.CSS.wrapper);
-    const icon = $.svg('sad-face', 52, 52);
-    const infoContainer = $.make('div', this.CSS.info);
-    const title = $.make('div', this.CSS.title, {
+    const wrapper = Dom.make('div', this.CSS.wrapper);
+    const icon = Dom.svg('sad-face', 52, 52);
+    const infoContainer = Dom.make('div', this.CSS.info);
+    const title = Dom.make('div', this.CSS.title, {
       textContent: this.title,
     });
-    const subtitle = $.make('div', this.CSS.subtitle, {
+    const subtitle = Dom.make('div', this.CSS.subtitle, {
       textContent: this.subtitle,
     });
 

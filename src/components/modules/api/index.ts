@@ -5,14 +5,16 @@
  * Each block has an Editor API instance to use provided public methods
  * if you cant to read more about how API works, please see docs
  */
-import Module from '../../__module';
+import { Module } from '../../__module';
 import { API as APIInterfaces } from '../../../../types';
 import { ToolType } from '../tools';
 
 /**
  * @class API
  */
-export default class API extends Module {
+export class API extends Module {
+
+  public static readonly displayName = 'API';
   /**
    * Editor.js Core API modules
    */

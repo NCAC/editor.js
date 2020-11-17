@@ -1,11 +1,13 @@
 import { Notifier } from '../../../../types/api';
 import { ConfirmNotifierOptions, NotifierOptions, PromptNotifierOptions } from 'codex-notifier';
-import Module from '../../__module';
+import { Module } from '../../__module';
 
 /**
  *
  */
-export default class NotifierAPI extends Module {
+export class NotifierAPI extends Module {
+
+  public static readonly displayName = 'NotifierAPI';
   /**
    * Available methods
    */

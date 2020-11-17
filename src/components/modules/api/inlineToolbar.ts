@@ -1,11 +1,13 @@
 import { InlineToolbar } from '../../../../types/api/inline-toolbar';
-import Module from '../../__module';
+import { Module } from '../../__module';
 
 /**
  * @class InlineToolbarAPI
  * Provides methods for working with the Inline Toolbar
  */
-export default class InlineToolbarAPI extends Module {
+export class InlineToolbarAPI extends Module {
+
+  public static readonly displayName = 'InlineToolbarAPI';
   /**
    * Available methods
    *

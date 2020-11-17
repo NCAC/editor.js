@@ -1,4 +1,4 @@
-import $ from '../dom';
+import { Dom } from '../dom';
 import { InlineTool, SanitizerConfig } from '../../../types';
 
 /**
@@ -8,7 +8,7 @@ import { InlineTool, SanitizerConfig } from '../../../types';
  *
  * Makes selected text bolder
  */
-export default class BoldInlineTool implements InlineTool {
+export class BoldInlineTool implements InlineTool {
   /**
    * Specifies Tool as Inline Toolbar Tool
    *
@@ -61,7 +61,7 @@ export default class BoldInlineTool implements InlineTool {
     this.nodes.button = document.createElement('button') as HTMLButtonElement;
     this.nodes.button.type = 'button';
     this.nodes.button.classList.add(this.CSS.button, this.CSS.buttonModifier);
-    this.nodes.button.appendChild($.svg('bold', 12, 14));
+    this.nodes.button.appendChild(Dom.svg('bold', 12, 14));
 
     return this.nodes.button;
   }
