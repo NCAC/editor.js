@@ -329,7 +329,7 @@ export class BlockManager extends Module {
     try {
       block.call(BlockToolAPI.ON_PASTE, pasteEvent);
     } catch (e) {
-      _.log(`Dom{toolName}: onPaste callback call is failed`, 'error', e);
+      _.log(`${toolName}: onPaste callback call is failed`, 'error', e);
     }
 
     return block;
@@ -523,7 +523,7 @@ export class BlockManager extends Module {
     }
 
     const nodes = this._blocks.nodes,
-        firstLevelBlock = element.closest(`.Dom{Block.CSS.wrapper}`),
+        firstLevelBlock = element.closest(`.${Block.CSS.wrapper}`),
         index = nodes.indexOf(firstLevelBlock as HTMLElement);
 
     if (index >= 0) {
@@ -609,7 +609,7 @@ export class BlockManager extends Module {
       childNode = childNode.parentNode;
     }
 
-    const firstLevelBlock = (childNode as HTMLElement).closest(`.Dom{Block.CSS.wrapper}`);
+    const firstLevelBlock = (childNode as HTMLElement).closest(`.${Block.CSS.wrapper}`);
 
     return this.blocks.find((block) => block.holder === firstLevelBlock);
   }

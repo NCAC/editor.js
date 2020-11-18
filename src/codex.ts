@@ -1,6 +1,7 @@
 'use strict';
 
 import { EditorConfig } from '../types';
+// import { Paragraph } from './components/tools/paragraph/index';
 
 /**
  * Apply polyfills
@@ -10,6 +11,7 @@ import { EditorConfig } from '../types';
 // import 'components/polyfills';
 import { Core } from './components/core';
 import * as _ from './components/utils';
+
 
 
 /**
@@ -138,6 +140,8 @@ class EditorJS {
 }
 interface WindowInterface extends Window {
   EditorJS: any
+  Paragraph: any;
 }
 
 (window as WindowInterface & typeof globalThis).EditorJS = EditorJS;
+// (window as WindowInterface & typeof globalThis).Paragraph = Paragraph;

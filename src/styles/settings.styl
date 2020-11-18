@@ -1,11 +1,11 @@
 .ce-settings {
-  @apply --overlay-pane;
+  overlay-pane()
   right: -1px;
   top: 30px;
   min-width: 114px;
   box-sizing: content-box;
 
-  @media (--mobile){
+  +media_mobile() {
     bottom: 40px;
     right: -11px;
     top: auto;
@@ -15,7 +15,7 @@
     left: auto;
     right: 12px;
 
-    @media (--mobile){
+    +media_mobile() {
       bottom: -5px;
       top: auto;
     }
@@ -42,7 +42,7 @@
   }
 
   &__button {
-    @apply --toolbar-button;
+    toolbar-button();
 
     &:not(:nth-child(3n+3)) {
       margin-right: 3px;
@@ -60,7 +60,7 @@
     }
 
     &--selected {
-      color: var(--color-active-icon);
+      color: $color-active-icon;
     }
 
     &--delete {
@@ -74,11 +74,11 @@
     }
 
     &--confirm {
-      background-color: var(--color-confirm) !important;
+      background-color: $color-confirm !important;
       color: #fff;
 
       &:hover {
-        background-color: color-mod(var(--color-confirm) blackness(+5%)) !important;
+        background-color: $color-confirm-hover !important;
       }
 
       .icon {

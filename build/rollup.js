@@ -10,6 +10,7 @@ const {
   rollup
 } = require("rollup");
 const analyzer = require("rollup-plugin-analyzer");
+const inquirer = require("./inquirer");
 
 const srcPath = path.join(__dirname, "..", "src");
 const distPath = path.join(__dirname, "..", "dist");
@@ -25,24 +26,19 @@ let babelConfig = {
   exclude: [path.join(srcPath, "/**/*.d.ts")]
 };
 babelConfig.babelrc = false;
-// babelConfig.babelHelpers = "bundled";
 babelConfig.plugins = [
   "babel-plugin-add-module-exports",
   "babel-plugin-class-display-name",
   "@babel/plugin-transform-runtime",
-  "@babel/proposal-class-properties"
-  /*,
-    "@babel/proposal-object-rest-spread",
-    "@babel/plugin-transform-object-assign"*/
+  "@babel/proposal-class-properties",
+  "@babel/proposal-object-rest-spread",
+  "@babel/plugin-transform-object-assign"
 ];
 babelConfig.presets = [
   "@babel/preset-typescript",
   [
     "@babel/env",
     {
-      // modules: "umd",
-      // "useBuiltIns": "entry",
-      // "corejs": 3,
       targets: {
         browsers: ["last 2 Chrome versions"]
       }
@@ -57,29 +53,10 @@ const plugins = [
     extensions: [".json", ".js", ".ts"],
     preferBuiltins: false
   }),
-  typescript({
-    include: ["../**/src/**/*.ts"]
-  }),
-  // typescript({
-  //   typescript: require("typescript"),
-  //   objectHashIgnoreUnknownHack: true,
-  //   verbosity: 3,
-  //   cacheRoot: "./build/cache-rtp2",
-  //   tsconfigDefaults: {
-  //     compilerOptions: {
-  //       declaration: true
-  //     }
-  //   },
-  //   tsconfig: "tsconfig.json",
-  //   tsconfigOverride: {
-  //     compilerOptions: {
-  //       declaration: false
-  //     }
-  //   }
-  // }),
-  // requireContext({
-  //   include: ["**/*.ts"]
-  // }),
+  typescript( //{
+    //include: ["../**/src/**/*.ts"]
+    /*}*/
+  ),
   commonJs(),
   json({
     indent: " ",
@@ -88,60 +65,113 @@ const plugins = [
   importSvg({
     stringify: true
   })
-  // alias({
-  //   entries: [{
-  //       find: "pugRuntime",
-  //       replacement: path.join(buildLibPath, "pug", "runtime.es.js")
-  //     },
-  //     {
-  //       find: "marionext",
-  //       replacement: path.join(tsLibraryPath, "marionext")
-  //     },
-  //     {
-  //       find: "iscroll",
-  //       replacement: path.join(themePath, "IScroll", "iscroll.js")
-  //     },
-  //     {
-  //       find: "isotope",
-  //       replacement: path.join(tsLibraryPath, "Isotope")
-  //     }
-  //   ]
-  // }),
-  // analyzer()
 ];
 
-const rollupConfig = {
-  input: [path.join(srcPath, "codex.ts")],
-  output: {
-    file: path.join(distPath, `editor.${version}.js`),
-    format: "iife",
-    name: "EditorJS",
-    esModule: false,
-  },
-  /*onwarn({
-    loc,
-    frame,
-    message
-  }) {
-    if (loc) {
-      console.warn(`${loc.file} (${loc.line}:${loc.column}) ${message}`);
-      if (frame) console.warn(frame);
-    } else {
-      console.warn(message);
-    }
-  },*/
-  plugins: plugins
-};
+function getRollupConfig(name) {
+  const input = ("core" === name) ? path.join(srcPath, "codex.ts") : path.join(srcPath, "plugin-paragraph.ts");
+  const outModuleName = ("core" === name) ? "EditorJS" : "Paragraph";
+  const outputFile = ("core" === name) ? path.join(distPath, `editor.${version}.js`) : path.join(distPath, `paragraph.${version}.js`);
 
-rollup({
-  input: rollupConfig.input,
-  plugins: rollupConfig.plugins
-}).catch((err) => {
-  throw err;
-}).then((bundle) => {
-  return bundle.write(rollupConfig.output)
-}).catch((err) => {
-  throw err;
-}).then(() => {
-  console.log("DONE");
-})
+  return {
+    input: [input],
+    output: {
+      file: outputFile,
+      format: "iife",
+      name: outModuleName,
+      esModule: false
+    },
+    onwarn({
+      loc,
+      frame,
+      message
+    }) {
+      if (loc) {
+        console.warn(`${loc.file} (${loc.line}:${loc.column}) ${message}`);
+        if (frame) console.warn(frame);
+      } else {
+        console.warn(message);
+      }
+    },
+    plugins: plugins
+  };
+}
+
+// const rollupConfig = {
+//   input: [path.join(srcPath, "codex.ts")],
+//   output: {
+//     file: path.join(distPath, `editor.${version}.js`),
+//     format: "iife",
+//     name: "EditorJS",
+//     esModule: false,
+//   },
+//   onwarn({
+//     loc,
+//     frame,
+//     message
+//   }) {
+//     if (loc) {
+//       console.warn(`${loc.file} (${loc.line}:${loc.column}) ${message}`);
+//       if (frame) console.warn(frame);
+//     } else {
+//       console.warn(message);
+//     }
+//   },
+//   plugins: plugins
+// };
+
+function choose() {
+  return inquirer.prompt([{
+    type: "checkbox",
+    "name": "build",
+    message: "select the components to build",
+    choices: [{
+        id: "core",
+        name: "core"
+      },
+      {
+        id: "paragraph",
+        name: "paragraph"
+      }
+    ]
+  }]);
+}
+
+module.exports = () => {
+  return new Promise((resolve) => {
+    return choose()
+      .then((answer) => {
+        console.log("answer: ", answer.build);
+        const promises = [];
+        answer.build.forEach((buildName) => {
+          const rollupConfig = getRollupConfig(buildName);
+          promises.push(new Promise((resolve) => {
+            return rollup({
+              input: rollupConfig.input,
+              plugins: rollupConfig.plugins
+            }).catch((err) => {
+              throw new Error(`Erreur build ${rollupConfig.input} => ${rollupConfig.outputFile}:\n${err}`);
+            }).then((bundle) => {
+              return bundle.write(rollupConfig.output)
+            }).catch((err) => {
+              throw new Error(`Erreur dans l'écriture de ${rollupConfig.outputFile}:\n${err}`);
+            }).then(resolve);
+
+          }));
+        });
+        return Promise.all(promises);
+      });
+    return rollup({
+      input: rollupConfig.input,
+      plugins: rollupConfig.plugins
+    }).catch((err) => {
+      throw err;
+    }).then((bundle) => {
+      return bundle.write(rollupConfig.output)
+    }).catch((err) => {
+      throw err;
+    }).then(() => {
+      console.log("\n========\nRollup JS DONE\n========");
+      resolve();
+    });
+  });
+}

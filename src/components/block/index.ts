@@ -118,7 +118,7 @@ export class Block {
   public tool: BlockTool;
 
   /**
-   * Class blueprint of the ool Block represents
+   * Class blueprint of the Tool Block represents
    */
   public class: BlockToolConstructable;
 

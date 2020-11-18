@@ -28,20 +28,20 @@
    * Styles for narrow holder
    */
   &--narrow &__redactor {
-    @media (--not-mobile) {
-      margin-right: var(--narrow-mode-right-padding);
+    +media_not_mobile() {
+      margin-right: $narrow-mode-right-padding;
     }
   }
 
   &--narrow&--rtl &__redactor {
-    @media (--not-mobile) {
-      margin-left: var(--narrow-mode-right-padding);
+    +media_not_mobile() {
+      margin-left: $narrow-mode-right-padding;
       margin-right: 0;
     }
   }
 
   &--narrow .ce-toolbar__actions {
-    @media (--not-mobile) {
+    +media_not_mobile() {
       right: -5px;
     }
   }
@@ -60,7 +60,7 @@
       margin-top: -15px;
       margin-left: -15px;
       border-radius: 50%;
-      border: 2px solid var(--color-gray-border);
+      border: 2px solid $color-gray-border;
       border-top-color: transparent;
       box-sizing: border-box;
       animation: editor-loader-spin 800ms infinite linear;
@@ -111,7 +111,7 @@
  * Set color for native selection
  */
 ::selection{
-  background-color: var(--inlineSelectionColor);
+  background-color: $inlineSelectionColor;
 }
 
 .codex-editor--toolbox-opened [contentEditable=true][data-placeholder]:focus::before {

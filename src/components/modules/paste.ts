@@ -317,7 +317,7 @@ export class Paste extends Module {
       this.getPatternsConfig(name, toolPasteConfig);
     } catch (e) {
       _.log(
-        `Paste handling for «Dom{name}» Tool hasn't been set up because of the error`,
+        `Paste handling for «${name}» Tool hasn't been set up because of the error`,
         'warn',
         e
       );
@@ -336,8 +336,8 @@ export class Paste extends Module {
     tags.forEach((tag) => {
       if (Object.prototype.hasOwnProperty.call(this.toolsTags, tag)) {
         _.log(
-          `Paste handler for «Dom{name}» Tool on «Dom{tag}» tag is skipped ` +
-          `because it is already used by «Dom{this.toolsTags[tag].tool}» Tool.`,
+          `Paste handler for ${name}» Tool on ${tag}» tag is skipped ` +
+          `because it is already used by ${this.toolsTags[tag].tool}» Tool.`,
           'warn'
         );
 
@@ -367,19 +367,19 @@ export class Paste extends Module {
     }
 
     if (extensions && !Array.isArray(extensions)) {
-      _.log(`«extensions» property of the onDrop config for «Dom{name}» Tool should be an array`);
+      _.log(`«extensions» property of the onDrop config for ${name}» Tool should be an array`);
       extensions = [];
     }
 
     if (mimeTypes && !Array.isArray(mimeTypes)) {
-      _.log(`«mimeTypes» property of the onDrop config for «Dom{name}» Tool should be an array`);
+      _.log(`«mimeTypes» property of the onDrop config for ${name}» Tool should be an array`);
       mimeTypes = [];
     }
 
     if (mimeTypes) {
       mimeTypes = mimeTypes.filter((type) => {
         if (!_.isValidMimeType(type)) {
-          _.log(`MIME type value «Dom{type}» for the «Dom{name}» Tool is not a valid MIME type`, 'warn');
+          _.log(`MIME type value ${type}» for the ${name}» Tool is not a valid MIME type`, 'warn');
 
           return false;
         }
@@ -409,7 +409,7 @@ export class Paste extends Module {
       /** Still need to validate pattern as it provided by user */
       if (!(pattern instanceof RegExp)) {
         _.log(
-          `Pattern Dom{pattern} for «Dom{name}» Tool is skipped because it should be a Regexp instance.`,
+          `Pattern ${pattern} for ${name}» Tool is skipped because it should be a Regexp instance.`,
           'warn'
         );
       }
