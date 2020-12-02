@@ -1,5 +1,5 @@
 import { Module } from '../__module';
-import * as _ from '../utils';
+import {generateId } from '../utils';
 
 /**
  * Event listener information
@@ -76,7 +76,7 @@ export class Listeners extends Module {
     handler: (event: Event) => void,
     options: boolean | AddEventListenerOptions = false
   ): string {
-    const id = _.generateId('l');
+    const id = generateId('l');
     const assignedEventData = {
       id,
       element,

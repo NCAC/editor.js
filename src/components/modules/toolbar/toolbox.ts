@@ -1,6 +1,6 @@
 import { Module } from '../../__module';
 import { Dom } from '../../dom';
-import * as _ from '../../utils';
+import { log, isEmpty, capitalize, beautifyShortcut } from '../../utils';
 import { BlockToolConstructable, ToolConstructable } from '../../../../types';
 import { Flipper } from '../../flipper';
 import { BlockToolAPI } from '../../block';
@@ -187,12 +187,12 @@ export class Toolbox extends Module<ToolboxNodes> {
     /**
      * Skip tools that don't pass 'toolbox' property
      */
-    if (_.isEmpty(toolToolboxSettings)) {
+    if (isEmpty(toolToolboxSettings)) {
       return;
     }
 
     if (toolToolboxSettings && !toolToolboxSettings.icon) {
-      _.log('Toolbar icon is missed. Tool %o skipped', 'warn', toolName);
+      log('Toolbar icon is missed. Tool %o skipped', 'warn', toolName);
 
       return;
     }
@@ -201,7 +201,7 @@ export class Toolbox extends Module<ToolboxNodes> {
      * @todo Add checkup for the render method
      */
     // if (typeof tool.render !== 'function') {
-    //   _.log('render method missed. Tool %o skipped', 'warn', tool);
+    //   log('render method missed. Tool %o skipped', 'warn', tool);
     //   return;
     // }
 
@@ -285,12 +285,12 @@ export class Toolbox extends Module<ToolboxNodes> {
     let shortcut = this.getToolShortcut(toolName, tool);
 
     const tooltip = Dom.make('div', this.CSS.buttonTooltip);
-    const hint = document.createTextNode(_.capitalize(name));
+    const hint = document.createTextNode(capitalize(name));
 
     tooltip.appendChild(hint);
 
     if (shortcut) {
-      shortcut = _.beautifyShortcut(shortcut);
+      shortcut = beautifyShortcut(shortcut);
 
       tooltip.appendChild(Dom.make('div', this.CSS.buttonShortcut, {
         textContent: shortcut,

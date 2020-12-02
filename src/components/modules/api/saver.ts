@@ -1,6 +1,6 @@
 import { Saver } from '../../../../types/api';
 import { OutputData } from '../../../../types';
-import * as _ from '../../utils';
+import { logLabeled } from '../../utils';
 import { Module } from '../../__module';
 
 /**
@@ -30,7 +30,7 @@ export class SaverAPI extends Module {
     const errorText = 'Editor\'s content can not be saved in read-only mode';
 
     if (this.Editor.ReadOnly.isEnabled) {
-      _.logLabeled(errorText, 'warn');
+      logLabeled(errorText, 'warn');
 
       return Promise.reject(new Error(errorText));
     }

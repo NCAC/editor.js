@@ -1,6 +1,6 @@
 import { Paragraph } from '../tools/paragraph/';
 import {Module} from '../__module';
-import * as _ from '../utils';
+import { deepMerge, isFunction, log, sequence } from '../utils';
 import {
   BlockToolConstructable,
   EditorConfig,
@@ -82,7 +82,7 @@ export class Tools extends Module {
       const notImplementedMethods = inlineToolRequiredMethods.filter((method) => !this.constructInline(tool, name)[method]);
 
       if (notImplementedMethods.length) {
-        _.log(
+        log(
           `Incorrect Inline Tool: ${tool.name}. Some of required methods is not implemented %o`,
           'warn',
           notImplementedMethods
@@ -238,7 +238,7 @@ export class Tools extends Module {
     /**
      * Assign internal tools
      */
-    this.config.tools = _.deepMerge({}, this.internalTools, this.config.tools);
+    this.config.tools = deepMerge({}, this.internalTools, this.config.tools);
 
     if (!Object.prototype.hasOwnProperty.call(this.config, 'tools') || Object.keys(this.config.tools).length === 0) {
       throw Error('Can\'t start without tools');
@@ -303,7 +303,7 @@ export class Tools extends Module {
     /**
      * to see how it works {@link '../utils.ts#sequence'}
      */
-    return _.sequence(sequenceData, (data: { toolName: string }) => {
+    return sequence(sequenceData, (data: { toolName: string }) => {
       this.success(data);
     }, (data: { toolName: string }) => {
       this.fallback(data);
@@ -413,7 +413,7 @@ export class Tools extends Module {
    */
   public destroy(): void {
     Object.values(this.available).forEach(async tool => {
-      if (_.isFunction(tool.reset)) {
+      if (isFunction(tool.reset)) {
         await tool.reset();
       }
     });
@@ -424,15 +424,14 @@ export class Tools extends Module {
    *
    * @returns {Array} list of functions that needs to be fired sequentially
    */
-  private getListOfPrepareFunctions(): Array<{
+  private getListOfPrepareFunctions(): {
     function: (data: { toolName: string; config: ToolConfig }) => void;
     data: { toolName: string; config: ToolConfig };
-  }> {
-    const toolPreparationList: Array<{
+  }[] {
+    const toolPreparationList: {
       function: (data: { toolName: string; config: ToolConfig }) => void;
       data: { toolName: string; config: ToolConfig };
-    }
-    > = [];
+    }[] = [];
 
     for (const toolName in this.toolsClasses) {
       if (Object.prototype.hasOwnProperty.call(this.toolsClasses, toolName)) {
@@ -442,11 +441,11 @@ export class Tools extends Module {
         /**
          * If Tool hasn't a prepare method,
          * still push it to tool preparation list to save tools order in Toolbox.
-         * As Tool's prepare method might be async, _.sequence util helps to save the order.
+         * As Tool's prepare method might be async, sequence util helps to save the order.
          */
         toolPreparationList.push({
           // eslint-disable-next-line @typescript-eslint/no-empty-function
-          function: _.isFunction(toolClass.prepare) ? toolClass.prepare : (): void => { },
+          function: isFunction(toolClass.prepare) ? toolClass.prepare : (): void => { },
           data: {
             toolName,
             config: toolConfig,
@@ -473,7 +472,7 @@ export class Tools extends Module {
 
         const tool = this.config.tools[toolName];
 
-        if (!_.isFunction(tool) && !_.isFunction((tool as ToolSettings).class)) {
+        if (!isFunction(tool) && !isFunction((tool as ToolSettings).class)) {
           throw Error(
             `Tool «${toolName}» must be a constructor function or an object with function in the «class» property`
           );

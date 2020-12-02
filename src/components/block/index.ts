@@ -12,7 +12,7 @@ import {
 
 import { SavedData } from '../../../types/data-formats';
 import { Dom } from '../dom';
-import * as _ from '../utils';
+import { debounce, isEmpty, isFunction, log } from '../utils';
 import { API } from '../modules/api';
 import { BlockAPI } from './api';
 import { ToolType } from '../modules/tools';
@@ -178,7 +178,7 @@ export class Block {
   /**
    * Is fired when DOM mutation has been happened
    */
-  private didMutated = _.debounce((): void => {
+  private didMutated = debounce((): void => {
     /**
      * Drop cache
      */
@@ -335,7 +335,7 @@ export class Block {
    */
   public get data(): Promise<BlockToolData> {
     return this.save().then((savedObject) => {
-      if (savedObject && !_.isEmpty(savedObject.data)) {
+      if (savedObject && !isEmpty(savedObject.data)) {
         return savedObject.data;
       } else {
         return {};
@@ -359,7 +359,7 @@ export class Block {
    * @returns {boolean}
    */
   public get mergeable(): boolean {
-    return _.isFunction(this.tool.merge);
+    return isFunction(this.tool.merge);
   }
 
   /**
@@ -504,7 +504,7 @@ export class Block {
      */
     if (this.tool[methodName] && this.tool[methodName] instanceof Function) {
       if (methodName === BlockToolAPI.APPEND_CALLBACK) {
-        _.log(
+        log(
           '`appendCallback` hook is deprecated and will be removed in the next major release. ' +
           'Use `rendered` hook instead',
           'warn'
@@ -515,7 +515,7 @@ export class Block {
         // eslint-disable-next-line no-useless-call
         this.tool[methodName].call(this.tool, params);
       } catch (e) {
-        _.log(`Error during '${methodName}' call: ${e.message}`, 'error');
+        log(`Error during '${methodName}' call: ${e.message}`, 'error');
       }
     }
   }
@@ -556,7 +556,7 @@ export class Block {
         };
       })
       .catch((error) => {
-        _.log(`Saving proccess for ${this.name} tool failed due to the ${error}`, 'log', 'red');
+        log(`Saving proccess for ${this.name} tool failed due to the ${error}`, 'log', 'red');
       });
   }
 

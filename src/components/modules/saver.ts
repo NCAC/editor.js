@@ -9,7 +9,7 @@ import { Module } from '../__module';
 import { OutputData } from '../../../types';
 import { ValidatedData } from '../../../types/data-formats';
 import { Block } from '../block';
-import * as _ from '../utils';
+import { log } from '../utils';
 
 
 /**
@@ -77,7 +77,7 @@ export class Saver extends Module {
     let totalTime = 0;
     const blocks = [];
 
-    _.log('[Editor.js saving]:', 'groupCollapsed');
+    log('[Editor.js saving]:', 'groupCollapsed');
 
     allExtractedData.forEach(({ tool, data, time, isValid }) => {
       totalTime += time;
@@ -85,15 +85,15 @@ export class Saver extends Module {
       /**
        * Capitalize Tool name
        */
-      _.log(`${tool.charAt(0).toUpperCase() + tool.slice(1)}`, 'group');
+      log(`${tool.charAt(0).toUpperCase() + tool.slice(1)}`, 'group');
 
       if (isValid) {
         /** Group process info */
-        _.log(data);
-        _.log(undefined, 'groupEnd');
+        log(data);
+        log(undefined, 'groupEnd');
       } else {
-        _.log(`Block «${tool}» skipped because saved data is invalid`);
-        _.log(undefined, 'groupEnd');
+        log(`Block «${tool}» skipped because saved data is invalid`);
+        log(undefined, 'groupEnd');
 
         return;
       }
@@ -111,8 +111,8 @@ export class Saver extends Module {
       });
     });
 
-    _.log('Total', 'log', totalTime);
-    _.log(undefined, 'groupEnd');
+    log('Total', 'log', totalTime);
+    log(undefined, 'groupEnd');
 
     return {
       time: +new Date(),

@@ -1,6 +1,6 @@
 import { Module } from '../../__module';
 import { Dom } from '../../dom';
-import * as _ from '../../utils';
+import { delay } from '../../utils';
 import { I18nConstructor } from '../../i18n';
 import { I18nInternalNS } from '../../i18n/namespace-internal';
 
@@ -214,7 +214,7 @@ export class Toolbar extends Module<ToolbarNodes> {
    *                                      This flag allows to open Toolbar with Toolbox
    */
   public open(withBlockActions = true, needToCloseToolbox = true): void {
-    _.delay(() => {
+    delay(() => {
       this.move(needToCloseToolbox);
       this.nodes.wrapper.classList.add(this.CSS.toolbarOpened);
 

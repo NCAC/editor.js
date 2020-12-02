@@ -9,7 +9,7 @@
 import { Block, BlockToolAPI } from '../block';
 import { Module } from '../__module';
 import { Dom } from '../dom';
-import * as _ from '../utils';
+import { log, isEmpty, isFunction } from '../utils';
 import { Blocks } from '../blocks';
 import { BlockToolConstructable, BlockToolData, PasteEvent } from '../../../types';
 
@@ -329,7 +329,7 @@ export class BlockManager extends Module {
     try {
       block.call(BlockToolAPI.ON_PASTE, pasteEvent);
     } catch (e) {
-      _.log(`${toolName}: onPaste callback call is failed`, 'error', e);
+      log(`${toolName}: onPaste callback call is failed`, 'error', e);
     }
 
     return block;
@@ -393,7 +393,7 @@ export class BlockManager extends Module {
 
     const blockToMergeData = await blockToMerge.data;
 
-    if (!_.isEmpty(blockToMergeData)) {
+    if (!isEmpty(blockToMergeData)) {
       await targetBlock.mergeWith(blockToMergeData);
     }
 
@@ -639,13 +639,13 @@ export class BlockManager extends Module {
   public move(toIndex, fromIndex = this.currentBlockIndex): void {
     // make sure indexes are valid and within a valid range
     if (isNaN(toIndex) || isNaN(fromIndex)) {
-      _.log(`Warning during 'move' call: incorrect indices provided.`, 'warn');
+      log(`Warning during 'move' call: incorrect indices provided.`, 'warn');
 
       return;
     }
 
     if (!this.validateIndex(toIndex) || !this.validateIndex(fromIndex)) {
-      _.log(`Warning during 'move' call: indices cannot be lower than 0 or greater than the amount of blocks.`, 'warn');
+      log(`Warning during 'move' call: indices cannot be lower than 0 or greater than the amount of blocks.`, 'warn');
 
       return;
     }
@@ -693,7 +693,7 @@ export class BlockManager extends Module {
    */
   public async destroy(): Promise<void> {
     await Promise.all(this.blocks.map((block) => {
-      if (_.isFunction(block.tool.destroy)) {
+      if (isFunction(block.tool.destroy)) {
         return block.tool.destroy();
       }
     }));

@@ -1,10 +1,10 @@
 import { Dom } from './dom';
-import * as _ from './utils';
 import { EditorConfig, OutputData, SanitizerConfig } from '../../types';
 import { EditorModules } from '../types-internal/editor-modules';
 import { I18nConstructor } from './i18n';
 import { CriticalError } from './errors/critical';
 import { Modules } from './modules';
+import { deprecationAssert, isEmpty, log, logLabeled, LogLevels, setLogLevel  } from './utils';
 
 /**
  * @typedef {Core} Core - editor core class
@@ -60,7 +60,7 @@ export class Core {
         await this.init();
         await this.start();
 
-        _.logLabeled('I\'m ready! (ﾉ◕ヮ◕)ﾉ*:･ﾟ✧', 'log', '', 'color: #E24A75');
+        logLabeled('I\'m ready! (ﾉ◕ヮ◕)ﾉ*:･ﾟ✧', 'log', '', 'color: #E24A75');
 
         setTimeout(async () => {
           await this.render();
@@ -84,7 +84,7 @@ export class Core {
         }, 500);
       })
       .catch((error) => {
-        _.log(`Editor.js is not ready because of ${error}`, 'error');
+        log(`Editor.js is not ready because of ${error}`, 'error');
 
         /**
          * Reject this.isReady promise
@@ -112,7 +112,7 @@ export class Core {
     /**
      * If holderId is preset, assign him to holder property and work next only with holder
      */
-    _.deprecationAssert(!!config.holderId, 'config.holderId', 'config.holder');
+    deprecationAssert(!!config.holderId, 'config.holderId', 'config.holder');
     if (config.holderId && !config.holder) {
       config.holder = config.holderId;
       config.holderId = null;
@@ -133,15 +133,15 @@ export class Core {
     }
 
     if (!this.config.logLevel) {
-      this.config.logLevel = _.LogLevels.VERBOSE;
+      this.config.logLevel = LogLevels.VERBOSE;
     }
 
-    _.setLogLevel(this.config.logLevel);
+    setLogLevel(this.config.logLevel);
 
     /**
      * If default Block's Tool was not passed, use the Paragraph Tool
      */
-    _.deprecationAssert(Boolean(this.config.initialBlock), 'config.initialBlock', 'config.defaultBlock');
+    deprecationAssert(Boolean(this.config.initialBlock), 'config.initialBlock', 'config.defaultBlock');
     this.config.defaultBlock = this.config.defaultBlock || this.config.initialBlock || 'paragraph';
 
     /**
@@ -182,7 +182,7 @@ export class Core {
     /**
      * Initialize default Block to pass data to the Renderer
      */
-    if (_.isEmpty(this.config.data)) {
+    if (isEmpty(this.config.data)) {
       this.config.data = {} as OutputData;
       this.config.data.blocks = [ defaultBlockData ];
     } else {
@@ -277,7 +277,7 @@ export class Core {
 
     await modulesToPrepare.reduce(
       (promise, module) => promise.then(async () => {
-        // _.log(`Preparing ${module} module`, 'time');
+        // log(`Preparing ${module} module`, 'time');
 
         try {
           await this.moduleInstances[module].prepare();
@@ -289,9 +289,9 @@ export class Core {
           if (e instanceof CriticalError) {
             throw new Error(e.message);
           }
-          _.log(`Module ${module} was skipped because of %o`, 'warn', e);
+          log(`Module ${module} was skipped because of %o`, 'warn', e);
         }
-        // _.log(`Preparing ${module} module`, 'timeEnd');
+        // log(`Preparing ${module} module`, 'timeEnd');
       }),
       Promise.resolve()
     );
@@ -309,10 +309,6 @@ export class Core {
    */
   private constructModules(): void {
     Modules.forEach((Module) => {
-      /**
-       * If module has non-default exports, passed object contains them all and default export as 'default' property
-       */
-      // const Module = _.isFunction(module) ? module : module.default;
 
       try {
         /**
@@ -327,7 +323,7 @@ export class Core {
           config: this.configuration as EditorConfig,
         });
       } catch (e) {
-        _.log(`Module ${(Module as any).displayName} skipped because`, 'warn', e);
+        log(`Module ${(Module as any).displayName} skipped because`, 'warn', e);
       }
     });
   }

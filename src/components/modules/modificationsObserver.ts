@@ -6,7 +6,7 @@
  */
 
 import { Module } from '../__module';
-import * as _ from '../utils';
+import { debounce, isFunction } from '../utils';
 import { Block } from '../block';
 
 /**
@@ -37,10 +37,10 @@ export class ModificationsObserver extends Module {
    *
    * @type {Function}
    */
-  private mutationDebouncer = _.debounce(() => {
+  private mutationDebouncer = debounce(() => {
     this.updateNativeInputs();
 
-    if (_.isFunction(this.config.onChange)) {
+    if (isFunction(this.config.onChange)) {
       this.config.onChange(this.Editor.API.methods);
     }
   }, ModificationsObserver.DebounceTimer);

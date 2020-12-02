@@ -13,13 +13,12 @@
     // allows to import .json files for i18n
     "resolveJsonModule": true,
     "allowJs": true,
-    "rootDir": "src",
 
     // allows to omit export default in .json files
     "allowSyntheticDefaultImports": true
   },
   "include": [
-    "src/**/*"
+    "**/*.ts"
   ],
   "exclude": [
     "node_modules",

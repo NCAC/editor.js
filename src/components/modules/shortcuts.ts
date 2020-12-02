@@ -1,4 +1,4 @@
-import Shortcut from '@codexteam/shortcuts';
+import { Shortcut } from './shortcut';
 
 /**
  * Contains keyboard and mouse events binded on each Block by Block Manager
@@ -27,6 +27,7 @@ export interface ShortcutData {
   handler(event): void;
 }
 
+
 /**
  * @class Shortcut
  * @classdesc Allows to register new shortcut
@@ -52,7 +53,7 @@ export class Shortcuts extends Module {
     const newShortcut = new Shortcut({
       name: shortcut.name,
       on: document, // UI.nodes.redactor
-      callback: shortcut.handler,
+      handler: shortcut.handler,
     });
 
     this.registeredShortcuts.push(newShortcut);

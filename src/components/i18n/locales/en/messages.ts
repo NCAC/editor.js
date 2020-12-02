@@ -1,4 +1,4 @@
-{
+export default {
   "ui": {
     "blockTunes": {
       "toggler": {

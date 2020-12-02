@@ -17,7 +17,7 @@
  */
 
 import { Module } from '../__module';
-import * as _ from '../utils';
+import { isEmpty, isFunction } from '../utils';
 
 /**
  * @typedef {object} SanitizerConfig
@@ -35,7 +35,7 @@ import * as _ from '../utils';
  * }
  */
 
-import HTMLJanitor from 'html-janitor';
+import { HTMLJanitor } from '../../html-janitor';
 import { BlockToolData, InlineToolConstructable, SanitizerConfig } from '../../../types';
 import { SavedData } from '../../../types/data-formats';
 
@@ -68,7 +68,7 @@ export class Sanitizer extends Module {
     return blocksData.map((block) => {
       const toolConfig = this.composeToolConfig(block.tool);
 
-      if (_.isEmpty(toolConfig)) {
+      if (isEmpty(toolConfig)) {
         return block;
       }
 
@@ -159,7 +159,7 @@ export class Sanitizer extends Module {
     /**
      * If Tools doesn't provide sanitizer config or it is empty
      */
-    if (!toolClass.sanitize || (toolClass[sanitizeGetter] && _.isEmpty(toolClass[sanitizeGetter]))) {
+    if (!toolClass.sanitize || (toolClass[sanitizeGetter] && isEmpty(toolClass[sanitizeGetter]))) {
       return baseConfig;
     }
 
@@ -311,7 +311,7 @@ export class Sanitizer extends Module {
    * @param {SanitizerConfig} config - config to check
    */
   private isRule(config: SanitizerConfig): boolean {
-    return typeof config === 'object' || typeof config === 'boolean' || _.isFunction(config);
+    return typeof config === 'object' || typeof config === 'boolean' || isFunction(config);
   }
 
   /**

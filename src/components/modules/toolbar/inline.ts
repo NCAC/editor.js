@@ -1,11 +1,16 @@
 import { Module } from '../../__module';
 import { Dom } from '../../dom';
 import { SelectionUtils } from '../../selection';
-import * as _ from '../../utils';
-import { InlineTool, InlineToolConstructable, ToolConstructable, ToolSettings } from '../../../../types';
+import { beautifyShortcut, capitalize, isFunction, log  } from '../../utils';
+
+import { InlineTool, InlineToolConstructable } from '../../../../types/tools/inline-tool';
+import { ToolConstructable, ToolSettings } from '../../../../types/tools/index';
+
 import { Flipper } from '../../flipper';
 import { I18nConstructor } from '../../i18n';
 import { I18nInternalNS } from '../../i18n/namespace-internal';
+
+
 
 /**
  * Inline Toolbar elements
@@ -191,7 +196,7 @@ export class InlineToolbar extends Module<InlineToolbarNodes> {
       /**
        * @todo replace 'clear' with 'destroy'
        */
-      if (_.isFunction(toolInstance.clear)) {
+      if (isFunction(toolInstance.clear)) {
         toolInstance.clear();
       }
     });
@@ -534,7 +539,7 @@ export class InlineToolbar extends Module<InlineToolbarNodes> {
       toolboxSettings.icon ||
       userToolboxSettings.title ||
       toolboxSettings.title ||
-      _.capitalize(toolName);
+      capitalize(toolName);
   }
 
   /**
@@ -604,7 +609,7 @@ export class InlineToolbar extends Module<InlineToolbarNodes> {
     const button = tool.render();
 
     if (!button) {
-      _.log('Render method must return an instance of Node', 'warn', toolName);
+      log('Render method must return an instance of Node', 'warn', toolName);
 
       return;
     }
@@ -613,7 +618,7 @@ export class InlineToolbar extends Module<InlineToolbarNodes> {
     this.nodes.buttons.appendChild(button);
     this.toolsInstances.set(toolName, tool);
 
-    if (_.isFunction(tool.renderActions)) {
+    if (isFunction(tool.renderActions)) {
       const actions = tool.renderActions();
 
       this.nodes.actions.appendChild(actions);
@@ -638,7 +643,7 @@ export class InlineToolbar extends Module<InlineToolbarNodes> {
     const internalTools: string[] = Object
       .entries(Tools.internalTools)
       .filter(([, toolClass]: [string, ToolConstructable | ToolSettings]) => {
-        if (_.isFunction(toolClass)) {
+        if (isFunction(toolClass)) {
           return toolClass[Tools.INTERNAL_SETTINGS.IS_INLINE];
         }
 
@@ -669,14 +674,14 @@ export class InlineToolbar extends Module<InlineToolbarNodes> {
     const tooltipContent = Dom.make('div');
     const toolTitle = I18nConstructor.t(
       I18nInternalNS.toolNames,
-      Tools.toolsClasses[toolName][Tools.INTERNAL_SETTINGS.TITLE] || _.capitalize(toolName)
+      Tools.toolsClasses[toolName][Tools.INTERNAL_SETTINGS.TITLE] || capitalize(toolName)
     );
 
     tooltipContent.appendChild(Dom.text(toolTitle));
 
     if (shortcut) {
       tooltipContent.appendChild(Dom.make('div', this.CSS.inlineToolbarShortcut, {
-        textContent: _.beautifyShortcut(shortcut),
+        textContent: beautifyShortcut(shortcut),
       }));
     }
 

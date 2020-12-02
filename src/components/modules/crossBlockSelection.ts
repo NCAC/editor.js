@@ -1,7 +1,7 @@
 import { Module } from '../__module';
 import { Block } from '../block';
 import { SelectionUtils } from '../selection';
-import * as _ from '../utils';
+import { keyCodes, mouseButtons } from '../utils';
 
 /**
  *
@@ -39,7 +39,7 @@ export class CrossBlockSelection extends Module {
    * @param {MouseEvent} event - mouse down event
    */
   public watchSelection(event: MouseEvent): void {
-    if (event.button !== _.mouseButtons.LEFT) {
+    if (event.button !== mouseButtons.LEFT) {
       return;
     }
 
@@ -119,13 +119,13 @@ export class CrossBlockSelection extends Module {
          * Set caret depending on pressed key if pressed key is an arrow.
          */
         switch (reason.keyCode) {
-          case _.keyCodes.DOWN:
-          case _.keyCodes.RIGHT:
+          case keyCodes.DOWN:
+          case keyCodes.RIGHT:
             Caret.setToBlock(BlockManager.blocks[Math.max(fIndex, lIndex)], Caret.positions.END);
             break;
 
-          case _.keyCodes.UP:
-          case _.keyCodes.LEFT:
+          case keyCodes.UP:
+          case keyCodes.LEFT:
             Caret.setToBlock(BlockManager.blocks[Math.min(fIndex, lIndex)], Caret.positions.START);
             break;
           default:

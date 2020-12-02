@@ -1,6 +1,5 @@
 import {DomIterator} from './domIterator';
-import * as _ from './utils';
-
+import { keyCodes, isFunction } from './utils'
 /**
  * Flipper construction options
  *
@@ -81,12 +80,12 @@ export class Flipper {
    */
   public static get usedKeys(): number[] {
     return [
-      _.keyCodes.TAB,
-      _.keyCodes.LEFT,
-      _.keyCodes.RIGHT,
-      _.keyCodes.ENTER,
-      _.keyCodes.UP,
-      _.keyCodes.DOWN,
+      keyCodes.TAB,
+      keyCodes.LEFT,
+      keyCodes.RIGHT,
+      keyCodes.ENTER,
+      keyCodes.UP,
+      keyCodes.DOWN,
     ];
   }
 
@@ -181,18 +180,18 @@ export class Flipper {
     }
 
     switch (event.keyCode) {
-      case _.keyCodes.TAB:
+      case keyCodes.TAB:
         this.handleTabPress(event);
         break;
-      case _.keyCodes.LEFT:
-      case _.keyCodes.UP:
+      case keyCodes.LEFT:
+      case keyCodes.UP:
         this.flipLeft();
         break;
-      case _.keyCodes.RIGHT:
-      case _.keyCodes.DOWN:
+      case keyCodes.RIGHT:
+      case keyCodes.DOWN:
         this.flipRight();
         break;
-      case _.keyCodes.ENTER:
+      case keyCodes.ENTER:
         this.handleEnterPress(event);
         break;
     }
@@ -207,18 +206,18 @@ export class Flipper {
    */
   private isEventReadyForHandling(event: KeyboardEvent): boolean {
     const handlingKeyCodeList = [
-      _.keyCodes.TAB,
-      _.keyCodes.ENTER,
+      keyCodes.TAB,
+      keyCodes.ENTER,
     ];
 
     const isCurrentItemIsFocusedInput = this.iterator.currentItem == document.activeElement;
 
     if (this.allowArrows && !isCurrentItemIsFocusedInput) {
       handlingKeyCodeList.push(
-        _.keyCodes.LEFT,
-        _.keyCodes.RIGHT,
-        _.keyCodes.UP,
-        _.keyCodes.DOWN
+        keyCodes.LEFT,
+        keyCodes.RIGHT,
+        keyCodes.UP,
+        keyCodes.DOWN
       );
     }
 
@@ -259,7 +258,7 @@ export class Flipper {
       this.iterator.currentItem.click();
     }
 
-    if (_.isFunction(this.activateCallback)) {
+    if (isFunction(this.activateCallback)) {
       this.activateCallback(this.iterator.currentItem);
     }
 

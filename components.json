@@ -1,0 +1,24 @@
+[
+  {
+    "id": "EditorJS",
+    "js": {
+      "input": "src/editorJs.core.ts",
+      "output": "dist/editorjs.core.js"
+    },
+    "css": {
+      "input": "src/styles/core.styl",
+      "outputFileName": "editorjs.core.css"
+    }
+  },
+  {
+    "id": "Paragraph",
+    "js": {
+      "input": "src/components/tools/paragraph/index.ts",
+      "output": "dist/editorjs.paragraph.js"
+    },
+    "css": {
+      "input": "src/components/tools/paragraph/paragraph.styl",
+      "outputFileName": "editorjs.paragraph.css"
+    }
+  }
+]

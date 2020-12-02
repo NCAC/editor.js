@@ -18,12 +18,14 @@ const cssDeclarationSorter = require("css-declaration-sorter");
 const mergeMediaQueries = require("css-mqpacker");
 
 const version = require("../package.json").version;
-
+const rootPath = path.join(__dirname, "..");
+const components = require("../components.json");
 const stylusPath = path.join(__dirname, "..", "src", "styles");
 const distPath = path.join(__dirname, "..", "dist");
 
-module.exports = () => {
-  return new Promise((resolve, reject) => {
+
+function bundleCss(component) {
+  return new Promise((resolve) => {
     const postCssPlugins = [
       discardCssDuplicates(),
       mergeCssSelectors(),
@@ -35,10 +37,8 @@ module.exports = () => {
       autoprefixer({
         overrideBrowserslist: ["last 2 versions", "ios 6", "android 4"]
       })
-
     ];
-
-    vinylFileSystem.src(path.join(stylusPath, "main.styl"))
+    vinylFileSystem.src(path.join(rootPath, component.css.input))
       .pipe(
         eventStreamMap((file, callback) => {
           console.log("Beginning build css file", file.relative);
@@ -75,15 +75,89 @@ module.exports = () => {
         })
       )
       .pipe(
-        rename(`style.${version}.css`)
+        rename(component.css.outputFileName)
       )
       .pipe(
         vinylFileSystem.dest(distPath)
       )
       .on("error", (err) => {
-        reject(err);
+        throw new Error(`Erreur de build css du fichier ${component.css.input}: \n${err}`);
       })
       .on("end", resolve);
 
+  })
+}
+
+
+module.exports = () => {
+
+  const promises = [];
+  components.forEach((component) => {
+    promises.push(bundleCss(component));
   });
+  return Promise.all(promises);
+
+  // return new Promise((resolve, reject) => {
+  //   const postCssPlugins = [
+  //     discardCssDuplicates(),
+  //     mergeCssSelectors(),
+  //     mergeCssValues(),
+  //     mergeMediaQueries(),
+  //     cssDeclarationSorter({
+  //       order: "concentric-css"
+  //     }),
+  //     autoprefixer({
+  //       overrideBrowserslist: ["last 2 versions", "ios 6", "android 4"]
+  //     })
+
+  //   ];
+
+  //   vinylFileSystem.src(path.join(stylusPath, "main.styl"))
+  //     .pipe(
+  //       eventStreamMap((file, callback) => {
+  //         console.log("Beginning build css file", file.relative);
+  //         return callback(null, file);
+  //       })
+  //     )
+  //     .pipe(
+  //       stylus()
+  //     )
+  //     .pipe(
+  //       csslint()
+  //     )
+  //     .pipe(
+  //       postCss(postCssPlugins)
+  //     )
+  //     .pipe(
+  //       cleanCss({
+  //         format: {
+  //           breaks: {
+  //             afterBlockBegins: true,
+  //             afterRuleEnds: true,
+  //             afterBlockEnds: true,
+  //             afterProperty: true,
+  //             afterRuleBegins: true
+  //           },
+  //           indentBy: 2,
+  //           spaces: {
+  //             aroundSelectorRelation: true,
+  //             beforeBlockBegins: true,
+  //             beforeValue: true
+  //           }
+  //         },
+  //         level: 2
+  //       })
+  //     )
+  //     .pipe(
+  //       rename(`style.${version}.css`)
+  //     )
+  //     .pipe(
+  //       vinylFileSystem.dest(distPath)
+  //     )
+  //     .on("error", (err) => {
+  //       reject(err);
+  //     })
+  //     .on("end", resolve);
+
+  // });
 }

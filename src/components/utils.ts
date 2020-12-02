@@ -3,16 +3,17 @@
  */
 
 import { Dom } from './dom';
+import { ValuesType } from 'utility-types'
 
 /**
  * Possible log levels
  */
-export enum LogLevels {
-  VERBOSE = 'VERBOSE',
-  INFO = 'INFO',
-  WARN = 'WARN',
-  ERROR = 'ERROR',
-}
+export const LogLevels = {
+  VERBOSE: 'VERBOSE',
+  INFO: 'INFO',
+  WARN: 'WARN',
+  ERROR: 'ERROR',
+} as const;
 
 /**
  * Allow to use global VERSION, that will be overwritten by Webpack
@@ -78,14 +79,27 @@ export const mouseButtons = {
  * @param {*} [args]      - argument to log with a message
  * @param {string} style  - additional styling to message
  */
-function _log(
+
+interface LogFn {
+  (
+    labeled: boolean,
+    msg: string,
+    type: string,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    args?: any,
+    style?: string
+  ) : void;
+  logLevel?: ValuesType<typeof LogLevels>
+}
+
+const _log: LogFn = (
   labeled: boolean,
   msg: string,
   type = 'log',
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   args?: any,
   style = 'color: inherit'
-): void {
+): void  => {
   if (!('console' in window) || !window.console[type]) {
     return;
   }
@@ -93,7 +107,7 @@ function _log(
   const isSimpleType = ['info', 'log', 'warn', 'error'].includes(type);
   const argsToPass = [];
 
-  switch (_log.logLevel) {
+  switch (_log.logLevel as (ValuesType<typeof LogLevels>)) {
     case LogLevels.ERROR:
       if (type !== 'error') {
         return;
@@ -149,6 +163,79 @@ function _log(
   } catch (ignored) {}
 }
 
+_log.logLevel = 'VERBOSE';
+
+// function _log(
+//   labeled: boolean,
+//   msg: string,
+//   type = 'log',
+//   // eslint-disable-next-line @typescript-eslint/no-explicit-any
+//   args?: any,
+//   style = 'color: inherit'
+// ): void {
+//   if (!('console' in window) || !window.console[type]) {
+//     return;
+//   }
+
+//   const isSimpleType = ['info', 'log', 'warn', 'error'].includes(type);
+//   const argsToPass = [];
+
+//   switch (_log.logLevel as (ValuesType<typeof LogLevels>)) {
+//     case LogLevels.ERROR:
+//       if (type !== 'error') {
+//         return;
+//       }
+//       break;
+
+//     case LogLevels.WARN:
+//       if (!['error', 'warn'].includes(type)) {
+//         return;
+//       }
+//       break;
+
+//     case LogLevels.INFO:
+//       if (!isSimpleType || labeled) {
+//         return;
+//       }
+//       break;
+//   }
+
+//   if (args) {
+//     argsToPass.push(args);
+//   }
+
+//   const editorLabelText = 'Editor.js 2.19.1';
+//   const editorLabelStyle = `line-height: 1em;
+//             color: #006FEA;
+//             display: inline-block;
+//             font-size: 11px;
+//             line-height: 1em;
+//             background-color: #fff;
+//             padding: 4px 9px;
+//             border-radius: 30px;
+//             border: 1px solid rgba(56, 138, 229, 0.16);
+//             margin: 4px 5px 4px 0;`;
+
+//   if (labeled) {
+//     if (isSimpleType) {
+//       argsToPass.unshift(editorLabelStyle, style);
+//       msg = `%c${editorLabelText}%c ${msg}`;
+//     } else {
+//       msg = `( ${editorLabelText} )${msg}`;
+//     }
+//   }
+
+//   try {
+//     if (!isSimpleType) {
+//       console[type](msg);
+//     } else if (args) {
+//       console[type](`${msg} %o`, ...argsToPass);
+//     } else {
+//       console[type](msg, ...argsToPass);
+//     }
+//   } catch (ignored) {}
+// }
+
 /**
  * Current log level
  */
@@ -159,7 +246,7 @@ _log.logLevel = LogLevels.VERBOSE;
  *
  * @param {LogLevels} logLevel - log level to set
  */
-export function setLogLevel(logLevel: LogLevels): void {
+export function setLogLevel(logLevel: ValuesType<typeof LogLevels>): void {
   _log.logLevel = logLevel;
 }
 
@@ -263,7 +350,7 @@ export function array(collection: ArrayLike<any>): any[] {
  * @returns {boolean}
  */
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export function isFunction(fn: any): fn is Function {
+export function isFunction(fn: any): fn is ((...args: any[]) => any) {
   return typeof fn === 'function';
 }
 

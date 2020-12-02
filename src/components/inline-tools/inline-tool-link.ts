@@ -1,7 +1,7 @@
 import { SelectionUtils } from '../selection';
 
 import { Dom } from '../dom';
-import * as _ from '../utils';
+import { log } from '../utils';
 import { API, InlineTool, SanitizerConfig } from '../../../types';
 import { Notifier, Toolbar, I18n } from '../../../types/api';
 
@@ -299,7 +299,7 @@ export class LinkInlineTool implements InlineTool {
         style: 'error',
       });
 
-      _.log('Incorrect Link pasted', 'warn', value);
+      log('Incorrect Link pasted', 'warn', value);
 
       return;
     }

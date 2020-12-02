@@ -1,4 +1,4 @@
-import defaultDictionary from './locales/en/messages.json';
+import defaultDictionary from './locales/en/messages';
 import { DictNamespaces } from '../../types-internal/i18n-internal-namespace';
 import { typeOf } from '../utils';
 

@@ -7,7 +7,7 @@
  */
 import { Module } from '../__module';
 import { Block } from '../block';
-import * as _ from '../utils';
+import { delay, isPrintableKey } from '../utils';
 import { Dom } from '../dom';
 
 import { SelectionUtils } from '../selection';
@@ -236,18 +236,18 @@ export class BlockSelection extends Module {
     this.readyToBlockSelection = false;
 
     const isKeyboard = reason && (reason instanceof KeyboardEvent);
-    const isPrintableKey = isKeyboard && _.isPrintableKey((reason as KeyboardEvent).keyCode);
+    const _isPrintableKey = isKeyboard && isPrintableKey((reason as KeyboardEvent).keyCode);
 
     /**
      * If reason caused clear of the selection was printable key and any block is selected,
      * remove selected blocks and insert pressed key
      */
-    if (this.anyBlockSelected && isKeyboard && isPrintableKey && !SelectionUtils.isSelectionExists) {
+    if (this.anyBlockSelected && isKeyboard && _isPrintableKey && !SelectionUtils.isSelectionExists) {
       const indexToInsert = BlockManager.removeSelectedBlocks();
 
       BlockManager.insertDefaultBlockAtIndex(indexToInsert, true);
       Caret.setToBlock(BlockManager.currentBlock);
-      _.delay(() => {
+      delay(() => {
         const eventKey = (reason as KeyboardEvent).key;
 
         /**

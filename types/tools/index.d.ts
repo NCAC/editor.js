@@ -1,5 +1,5 @@
-import {BlockTool, BlockToolConstructable} from './block-tool';
-import {InlineTool, InlineToolConstructable} from './inline-tool';
+import { BlockTool, BlockToolConstructable } from './block-tool';
+import { InlineTool, InlineToolConstructable }  from './inline-tool';
 import {BaseTool, BaseToolConstructable} from './tool';
 
 export * from './block-tool';

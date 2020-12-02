@@ -1,6 +1,7 @@
 import { Module } from '../__module';
-import * as _ from '../utils';
 import { BlockToolConstructable, OutputBlockData } from '../../../types';
+
+import { ChainData , sequence, log } from "../utils"
 
 /**
  * Editor.js Renderer Module
@@ -47,11 +48,11 @@ export class Renderer extends Module {
   public async render(blocks: OutputBlockData[]): Promise<void> {
     const chainData = blocks.map((block) => ({ function: (): Promise<void> => this.insertBlock(block) }));
 
-    const sequence = await _.sequence(chainData as _.ChainData[]);
+    const _sequence = await sequence(chainData as ChainData[]);
 
     this.Editor.UI.checkEmptiness();
 
-    return sequence;
+    return _sequence;
   }
 
   /**
@@ -75,7 +76,7 @@ export class Renderer extends Module {
           data,
         });
       } catch (error) {
-        _.log(`Block «${tool}» skipped because of plugins error`, 'warn', data);
+        log(`Block «${tool}» skipped because of plugins error`, 'warn', data);
         throw Error(error);
       }
     } else {
@@ -102,7 +103,7 @@ export class Renderer extends Module {
 
       stub.stretched = true;
 
-      _.log(`Tool «${tool}» is not found. Check 'tools' property at your initial Editor.js config.`, 'warn');
+      log(`Tool «${tool}» is not found. Check 'tools' property at your initial Editor.js config.`, 'warn');
     }
   }
 }

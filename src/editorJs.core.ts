@@ -1,17 +1,8 @@
 'use strict';
 
 import { EditorConfig } from '../types';
-// import { Paragraph } from './components/tools/paragraph/index';
-
-/**
- * Apply polyfills
- */
-// import '@babel/register';
-
-// import 'components/polyfills';
 import { Core } from './components/core';
-import * as _ from './components/utils';
-
+import { isFunction } from './components/utils';
 
 
 /**
@@ -54,7 +45,7 @@ class EditorJS {
     /**
      * If `onReady` was passed in `configuration` then redefine onReady function
      */
-    if (typeof configuration === 'object' && _.isFunction(configuration.onReady)) {
+    if (typeof configuration === 'object' && isFunction(configuration.onReady)) {
       onReady = configuration.onReady;
     }
 
@@ -85,7 +76,7 @@ class EditorJS {
     const destroy = (): void => {
       Object.values(editor.moduleInstances)
         .forEach((moduleInstance) => {
-          if (_.isFunction(moduleInstance.destroy)) {
+          if (isFunction(moduleInstance.destroy)) {
             moduleInstance.destroy();
           }
         });

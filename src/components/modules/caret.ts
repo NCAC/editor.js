@@ -13,7 +13,7 @@ import { SelectionUtils } from '../selection';
 import { Module } from '../__module';
 import { Block } from '../block';
 import { Dom } from '../dom';
-import * as _ from '../utils';
+import { delay } from '../utils';
 
 /**
  * @typedef {Caret} Caret
@@ -262,7 +262,7 @@ export class Caret extends Module {
     /**
      * @todo try to fix via Promises or use querySelectorAll to not to use timeout
      */
-    _.delay(() => {
+    delay(() => {
       this.set(nodeToSet as HTMLElement, offset);
     }, 20)();
 

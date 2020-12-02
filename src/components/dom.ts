@@ -1,4 +1,4 @@
-import * as _ from './utils';
+import { array } from './utils';
 
 /**
  * DOM manipulations helper
@@ -212,7 +212,7 @@ export class Dom {
    * @param holder - element where to find inputs
    */
   public static findAllInputs(holder: Element): HTMLElement[] {
-    return _.array(holder.querySelectorAll(Dom.allInputsSelector))
+    return array(holder.querySelectorAll(Dom.allInputsSelector))
       /**
        * If contenteditable element contains block elements, treat them as inputs.
        */

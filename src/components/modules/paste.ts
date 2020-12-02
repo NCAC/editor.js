@@ -1,6 +1,6 @@
 import { Module } from '../__module';
 import { Dom } from '../dom';
-import * as _ from '../utils';
+import { log, isValidMimeType, isEmpty, getFileExtension } from '../utils';
 import {
   BlockTool,
   BlockToolConstructable,
@@ -316,7 +316,7 @@ export class Paste extends Module {
       this.getFilesConfig(name, toolPasteConfig);
       this.getPatternsConfig(name, toolPasteConfig);
     } catch (e) {
-      _.log(
+      log(
         `Paste handling for «${name}» Tool hasn't been set up because of the error`,
         'warn',
         e
@@ -335,7 +335,7 @@ export class Paste extends Module {
 
     tags.forEach((tag) => {
       if (Object.prototype.hasOwnProperty.call(this.toolsTags, tag)) {
-        _.log(
+        log(
           `Paste handler for ${name}» Tool on ${tag}» tag is skipped ` +
           `because it is already used by ${this.toolsTags[tag].tool}» Tool.`,
           'warn'
@@ -367,19 +367,19 @@ export class Paste extends Module {
     }
 
     if (extensions && !Array.isArray(extensions)) {
-      _.log(`«extensions» property of the onDrop config for ${name}» Tool should be an array`);
+      log(`«extensions» property of the onDrop config for ${name}» Tool should be an array`);
       extensions = [];
     }
 
     if (mimeTypes && !Array.isArray(mimeTypes)) {
-      _.log(`«mimeTypes» property of the onDrop config for ${name}» Tool should be an array`);
+      log(`«mimeTypes» property of the onDrop config for ${name}» Tool should be an array`);
       mimeTypes = [];
     }
 
     if (mimeTypes) {
       mimeTypes = mimeTypes.filter((type) => {
-        if (!_.isValidMimeType(type)) {
-          _.log(`MIME type value ${type}» for the ${name}» Tool is not a valid MIME type`, 'warn');
+        if (!isValidMimeType(type)) {
+          log(`MIME type value ${type}» for the ${name}» Tool is not a valid MIME type`, 'warn');
 
           return false;
         }
@@ -401,14 +401,14 @@ export class Paste extends Module {
    * @param {PasteConfig} toolPasteConfig - Tool onPaste configuration
    */
   private getPatternsConfig(name: string, toolPasteConfig: PasteConfig): void {
-    if (!toolPasteConfig.patterns || _.isEmpty(toolPasteConfig.patterns)) {
+    if (!toolPasteConfig.patterns || isEmpty(toolPasteConfig.patterns)) {
       return;
     }
 
     Object.entries(toolPasteConfig.patterns).forEach(([key, pattern]: [string, RegExp]) => {
       /** Still need to validate pattern as it provided by user */
       if (!(pattern instanceof RegExp)) {
-        _.log(
+        log(
           `Pattern ${pattern} for ${name}» Tool is skipped because it should be a Regexp instance.`,
           'warn'
         );
@@ -495,7 +495,7 @@ export class Paste extends Module {
    * @param {File} file - file to process
    */
   private async processFile(file: File): Promise<{event: PasteEvent; type: string}> {
-    const extension = _.getFileExtension(file);
+    const extension = getFileExtension(file);
 
     const foundConfig = Object
       .entries(this.toolsFiles)

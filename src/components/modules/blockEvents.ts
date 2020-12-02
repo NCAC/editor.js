@@ -2,7 +2,7 @@
  * Contains keyboard and mouse events binded on each Block by Block Manager
  */
 import {Module} from '../__module';
-import * as _ from '../utils';
+import { keyCodes, isPrintableKey, delay } from '../utils';
 import { SelectionUtils } from '../selection';
 import { Flipper } from '../flipper';
 
@@ -27,25 +27,25 @@ export class BlockEvents extends Module {
      * Fire keydown processor by event.keyCode
      */
     switch (event.keyCode) {
-      case _.keyCodes.BACKSPACE:
+      case keyCodes.BACKSPACE:
         this.backspace(event);
         break;
 
-      case _.keyCodes.ENTER:
+      case keyCodes.ENTER:
         this.enter(event);
         break;
 
-      case _.keyCodes.DOWN:
-      case _.keyCodes.RIGHT:
+      case keyCodes.DOWN:
+      case keyCodes.RIGHT:
         this.arrowRightAndDown(event);
         break;
 
-      case _.keyCodes.UP:
-      case _.keyCodes.LEFT:
+      case keyCodes.UP:
+      case keyCodes.LEFT:
         this.arrowLeftAndUp(event);
         break;
 
-      case _.keyCodes.TAB:
+      case keyCodes.TAB:
         this.tabPressed(event);
         break;
     }
@@ -70,7 +70,7 @@ export class BlockEvents extends Module {
      *  - close Conversion Toolbar
      *  - clear block highlighting
      */
-    if (_.isPrintableKey(event.keyCode)) {
+    if (isPrintableKey(event.keyCode)) {
       this.Editor.Toolbar.close();
       this.Editor.ConversionToolbar.close();
 
@@ -389,7 +389,7 @@ export class BlockEvents extends Module {
    */
   private arrowRightAndDown(event: KeyboardEvent): void {
     const isFlipperCombination = Flipper.usedKeys.includes(event.keyCode) &&
-      (!event.shiftKey || event.keyCode === _.keyCodes.TAB);
+      (!event.shiftKey || event.keyCode === keyCodes.TAB);
 
     /**
      * Arrows might be handled on toolbars by flipper
@@ -407,13 +407,13 @@ export class BlockEvents extends Module {
 
     const shouldEnableCBS = this.Editor.Caret.isAtEnd || this.Editor.BlockSelection.anyBlockSelected;
 
-    if (event.shiftKey && event.keyCode === _.keyCodes.DOWN && shouldEnableCBS) {
+    if (event.shiftKey && event.keyCode === keyCodes.DOWN && shouldEnableCBS) {
       this.Editor.CrossBlockSelection.toggleBlockSelectedState();
 
       return;
     }
 
-    const navigateNext = event.keyCode === _.keyCodes.DOWN || (event.keyCode === _.keyCodes.RIGHT && !this.isRtl);
+    const navigateNext = event.keyCode === keyCodes.DOWN || (event.keyCode === keyCodes.RIGHT && !this.isRtl);
     const isNavigated = navigateNext ? this.Editor.Caret.navigateNext() : this.Editor.Caret.navigatePrevious();
 
     if (isNavigated) {
@@ -425,7 +425,7 @@ export class BlockEvents extends Module {
       /**
        * After caret is set, update Block input index
        */
-      _.delay(() => {
+      delay(() => {
         /** Check currentBlock for case when user moves selection out of Editor */
         if (this.Editor.BlockManager.currentBlock) {
           this.Editor.BlockManager.currentBlock.updateCurrentInput();
@@ -450,7 +450,7 @@ export class BlockEvents extends Module {
      * Check for Flipper.usedKeys to allow navigate by UP and disallow by LEFT
      */
     if (this.Editor.UI.someToolbarOpened) {
-      if (Flipper.usedKeys.includes(event.keyCode) && (!event.shiftKey || event.keyCode === _.keyCodes.TAB)) {
+      if (Flipper.usedKeys.includes(event.keyCode) && (!event.shiftKey || event.keyCode === keyCodes.TAB)) {
         return;
       }
 
@@ -465,13 +465,13 @@ export class BlockEvents extends Module {
 
     const shouldEnableCBS = this.Editor.Caret.isAtStart || this.Editor.BlockSelection.anyBlockSelected;
 
-    if (event.shiftKey && event.keyCode === _.keyCodes.UP && shouldEnableCBS) {
+    if (event.shiftKey && event.keyCode === keyCodes.UP && shouldEnableCBS) {
       this.Editor.CrossBlockSelection.toggleBlockSelectedState(false);
 
       return;
     }
 
-    const navigatePrevious = event.keyCode === _.keyCodes.UP || (event.keyCode === _.keyCodes.LEFT && !this.isRtl);
+    const navigatePrevious = event.keyCode === keyCodes.UP || (event.keyCode === keyCodes.LEFT && !this.isRtl);
     const isNavigated = navigatePrevious ? this.Editor.Caret.navigatePrevious() : this.Editor.Caret.navigateNext();
 
     if (isNavigated) {
@@ -483,7 +483,7 @@ export class BlockEvents extends Module {
       /**
        * After caret is set, update Block input index
        */
-      _.delay(() => {
+      delay(() => {
         /** Check currentBlock for case when user ends selection out of Editor and then press arrow-key */
         if (this.Editor.BlockManager.currentBlock) {
           this.Editor.BlockManager.currentBlock.updateCurrentInput();
@@ -503,11 +503,11 @@ export class BlockEvents extends Module {
    * @param {KeyboardEvent} event - keyboard event
    */
   private needToolbarClosing(event: KeyboardEvent): boolean {
-    const toolboxItemSelected = (event.keyCode === _.keyCodes.ENTER && this.Editor.Toolbox.opened),
-        blockSettingsItemSelected = (event.keyCode === _.keyCodes.ENTER && this.Editor.BlockSettings.opened),
-        inlineToolbarItemSelected = (event.keyCode === _.keyCodes.ENTER && this.Editor.InlineToolbar.opened),
-        conversionToolbarItemSelected = (event.keyCode === _.keyCodes.ENTER && this.Editor.ConversionToolbar.opened),
-        flippingToolbarItems = event.keyCode === _.keyCodes.TAB;
+    const toolboxItemSelected = (event.keyCode === keyCodes.ENTER && this.Editor.Toolbox.opened),
+        blockSettingsItemSelected = (event.keyCode === keyCodes.ENTER && this.Editor.BlockSettings.opened),
+        inlineToolbarItemSelected = (event.keyCode === keyCodes.ENTER && this.Editor.InlineToolbar.opened),
+        conversionToolbarItemSelected = (event.keyCode === keyCodes.ENTER && this.Editor.ConversionToolbar.opened),
+        flippingToolbarItems = event.keyCode === keyCodes.TAB;
 
     /**
      * Do not close Toolbar in cases:

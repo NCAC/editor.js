@@ -1,6 +1,6 @@
 import { BlockAPI as BlockAPIInterface, Blocks } from '../../../../types/api';
 import { BlockToolData, OutputData, ToolConfig } from '../../../../types';
-import * as _ from './../../utils';
+import { log, logLabeled, deprecationAssert } from './../../utils';
 import { BlockAPI } from '../../block/api';
 import { Module } from '../../__module';
 
@@ -60,7 +60,7 @@ export class BlocksAPI extends Module {
     const block = this.Editor.BlockManager.getBlockByIndex(index);
 
     if (block === undefined) {
-      _.logLabeled('There is no block at index `' + index + '`', 'warn');
+      logLabeled('There is no block at index `' + index + '`', 'warn');
 
       return;
     }
@@ -76,7 +76,7 @@ export class BlocksAPI extends Module {
    * @deprecated — use 'move' instead
    */
   public swap(fromIndex: number, toIndex: number): void {
-    _.log(
+    log(
       '`blocks.swap()` method is deprecated and will be removed in the next major release. ' +
       'Use `block.move()` method instead',
       'info'
@@ -116,7 +116,7 @@ export class BlocksAPI extends Module {
     try {
       this.Editor.BlockManager.removeBlock(blockIndex);
     } catch (e) {
-      _.logLabeled(e, 'warn');
+      logLabeled(e, 'warn');
 
       return;
     }
@@ -179,7 +179,7 @@ export class BlocksAPI extends Module {
    * @deprecated Use BlockAPI interface to stretch Blocks
    */
   public stretchBlock(index: number, status = true): void {
-    _.deprecationAssert(
+    deprecationAssert(
       true,
       'blocks.stretchBlock()',
       'BlockAPI'
@@ -227,7 +227,7 @@ export class BlocksAPI extends Module {
    * @deprecated with insert() method
    */
   public insertNewBlock(): void {
-    _.log('Method blocks.insertNewBlock() is deprecated and it will be removed in the next major release. ' +
+    log('Method blocks.insertNewBlock() is deprecated and it will be removed in the next major release. ' +
       'Use blocks.insert() instead.', 'warn');
     this.insert();
   }

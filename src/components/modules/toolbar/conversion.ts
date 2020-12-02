@@ -1,7 +1,7 @@
 import { Module } from '../../__module';
 import { Dom } from '../../dom';
 import { BlockToolConstructable } from '../../../../types';
-import * as _ from '../../utils';
+import { isFunction, log, delay, isEmpty, capitalize } from '../../utils';
 import { SavedData } from '../../../../types/data-formats';
 import { Flipper } from '../../flipper';
 import { I18nConstructor } from '../../i18n';
@@ -120,7 +120,7 @@ export class ConversionToolbar extends Module<ConversionToolbarNodes> {
       this.close();
     }
 
-    if (_.isFunction(togglingCallback)) {
+    if (isFunction(togglingCallback)) {
       this.togglingCallback = togglingCallback;
     }
   }
@@ -144,7 +144,7 @@ export class ConversionToolbar extends Module<ConversionToolbarNodes> {
       }));
       this.flipper.focusFirst();
 
-      if (_.isFunction(this.togglingCallback)) {
+      if (isFunction(this.togglingCallback)) {
         this.togglingCallback(true);
       }
     }, 50);
@@ -158,7 +158,7 @@ export class ConversionToolbar extends Module<ConversionToolbarNodes> {
     this.flipper.deactivate();
     this.nodes.wrapper.classList.remove(ConversionToolbar.CSS.conversionToolbarShowed);
 
-    if (_.isFunction(this.togglingCallback)) {
+    if (isFunction(this.togglingCallback)) {
       this.togglingCallback(false);
     }
   }
@@ -215,12 +215,12 @@ export class ConversionToolbar extends Module<ConversionToolbarNodes> {
     let exportData = '';
     const exportProp = currentBlockClass[INTERNAL_SETTINGS.CONVERSION_CONFIG].export;
 
-    if (_.isFunction(exportProp)) {
+    if (isFunction(exportProp)) {
       exportData = exportProp(blockData);
     } else if (typeof exportProp === 'string') {
       exportData = blockData[exportProp];
     } else {
-      _.log('Conversion «export» property must be a string or function. ' +
+      log('Conversion «export» property must be a string or function. ' +
         'String means key of saved data object to export. Function should export processed string to export.');
 
       return;
@@ -242,12 +242,12 @@ export class ConversionToolbar extends Module<ConversionToolbarNodes> {
     let newBlockData = {};
     const importProp = replacingTool[INTERNAL_SETTINGS.CONVERSION_CONFIG].import;
 
-    if (_.isFunction(importProp)) {
+    if (isFunction(importProp)) {
       newBlockData = importProp(cleaned);
     } else if (typeof importProp === 'string') {
       newBlockData[importProp] = cleaned;
     } else {
-      _.log('Conversion «import» property must be a string or function. ' +
+      log('Conversion «import» property must be a string or function. ' +
         'String means key of tool data to import. Function accepts a imported string and return composed tool data.');
 
       return;
@@ -262,7 +262,7 @@ export class ConversionToolbar extends Module<ConversionToolbarNodes> {
     this.close();
     this.Editor.InlineToolbar.close();
 
-    _.delay(() => {
+    delay(() => {
       this.Editor.Caret.setToBlock(this.Editor.BlockManager.currentBlock);
     }, 10)();
   }
@@ -292,7 +292,7 @@ export class ConversionToolbar extends Module<ConversionToolbarNodes> {
       /**
        * Skip tools that don't pass 'toolbox' property
        */
-      if (_.isEmpty(toolboxSettings) || !toolboxSettings.icon) {
+      if (isEmpty(toolboxSettings) || !toolboxSettings.icon) {
         continue;
       }
 
@@ -322,7 +322,7 @@ export class ConversionToolbar extends Module<ConversionToolbarNodes> {
     icon.innerHTML = toolIcon;
 
     Dom.append(tool, icon);
-    Dom.append(tool, Dom.text(I18nConstructor.t(I18nInternalNS.toolNames, title || _.capitalize(toolName))));
+    Dom.append(tool, Dom.text(I18nConstructor.t(I18nInternalNS.toolNames, title || capitalize(toolName))));
 
     Dom.append(this.nodes.tools, tool);
     this.tools[toolName] = tool;

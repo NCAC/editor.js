@@ -1,7 +1,7 @@
 /**
  * TextRange interface fot IE9-
  */
-import * as _ from './utils';
+import { log } from './utils';
 import { Dom } from './dom';
 
 interface TextRange {
@@ -183,7 +183,7 @@ export class SelectionUtils {
     }
 
     if (!window.getSelection) {
-      _.log('Method window.getSelection is not supported', 'warn');
+      log('Method window.getSelection is not supported', 'warn');
 
       return rect;
     }
@@ -191,7 +191,7 @@ export class SelectionUtils {
     sel = window.getSelection();
 
     if (sel.rangeCount === null || isNaN(sel.rangeCount)) {
-      _.log('Method SelectionUtils.rangeCount is not supported', 'warn');
+      log('Method SelectionUtils.rangeCount is not supported', 'warn');
 
       return rect;
     }

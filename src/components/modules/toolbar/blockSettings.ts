@@ -1,7 +1,7 @@
 import { Module } from '../../__module';
 import { Dom } from '../../dom';
 import { Flipper, FlipperOptions } from '../../flipper';
-import * as _ from '../../utils';
+import { isFunction, delay } from '../../utils';
 import { SelectionUtils } from '../../selection';
 
 /**
@@ -224,7 +224,7 @@ export class BlockSettings extends Module<BlockSettingsNodes> {
    * Add Tool's settings
    */
   private addToolSettings(): void {
-    if (_.isFunction(this.Editor.BlockManager.currentBlock.tool.renderSettings)) {
+    if (isFunction(this.Editor.BlockManager.currentBlock.tool.renderSettings)) {
       Dom.append(this.nodes.toolSettings, this.Editor.BlockManager.currentBlock.tool.renderSettings());
     }
   }
@@ -260,7 +260,7 @@ export class BlockSettings extends Module<BlockSettingsNodes> {
          * Restoring focus on current Block after settings clicked.
          * For example, when H3 changed to H2 — DOM Elements replaced, so we need to focus a new one
          */
-        _.delay(() => {
+        delay(() => {
           this.Editor.Caret.setToBlock(this.Editor.BlockManager.currentBlock);
         }, 50)();
       },

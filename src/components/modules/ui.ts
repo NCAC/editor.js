@@ -11,7 +11,7 @@ import sprite from '../../../dist/sprite.svg';
  */
 import {Module} from '../__module';
 import { Dom } from '../dom';
-import * as _ from '../utils';
+import { debounce, getValidUrl, keyCodes, openTab } from '../utils';
 
 import { SelectionUtils } from '../selection';
 import { Block } from '../block';
@@ -116,7 +116,7 @@ export class UI extends Module<UINodes> {
    *
    * @type {() => void}
    */
-  private resizeDebouncer: () => void = _.debounce(() => {
+  private resizeDebouncer: () => void = debounce(() => {
     this.windowResize();
   }, 200);
 
@@ -389,15 +389,15 @@ export class UI extends Module<UINodes> {
    */
   private documentKeydown(event: KeyboardEvent): void {
     switch (event.keyCode) {
-      case _.keyCodes.ENTER:
+      case keyCodes.ENTER:
         this.enterPressed(event);
         break;
 
-      case _.keyCodes.BACKSPACE:
+      case keyCodes.BACKSPACE:
         this.backspacePressed(event);
         break;
 
-      case _.keyCodes.ESC:
+      case keyCodes.ESC:
         this.escapePressed(event);
         break;
 
@@ -686,9 +686,9 @@ export class UI extends Module<UINodes> {
       stopPropagation();
 
       const href = element.getAttribute('href');
-      const validUrl = _.getValidUrl(href);
+      const validUrl = getValidUrl(href);
 
-      _.openTab(validUrl);
+      openTab(validUrl);
 
       return;
     }

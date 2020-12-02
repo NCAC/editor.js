@@ -1,4 +1,4 @@
-import defaultDictionary from './locales/en/messages.json';
+import defaultDictionary from './locales/en/messages';
 import { I18nDictionary, Dictionary } from '../../../types/configs';
 import { LeavesDictKeys } from '../../types-internal/i18n-internal-namespace';
 
