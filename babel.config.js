@@ -13,7 +13,7 @@ module.exports = {
       "@babel/env",
       {
         targets: {
-          browsers: ["> 2%"]
+          browsers: ["last 2 versions", "not dead", "> 0.2%"]
         }
       }
     ]

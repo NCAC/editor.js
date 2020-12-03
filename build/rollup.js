@@ -1,9 +1,5 @@
-// const typescript = require("rollup-plugin-typescript2");
-// const typescript = require("@rollup/plugin-typescript");
-const typescript = require("./rollup-plugin-typescript");
-const rollupTypescript = require("./rollup-plugin-ts");
+const rollupTypescript = require("rollup-plugin-ts");
 const nodeResolve = require("@rollup/plugin-node-resolve").nodeResolve;
-const babel = require("@rollup/plugin-babel").babel;
 const importSvg = require("rollup-plugin-svg-import");
 const json = require("@rollup/plugin-json");
 const path = require("path");
@@ -15,32 +11,7 @@ const analyzer = require("rollup-plugin-analyzer");
 const components = require("../components.json");
 
 const rootPath = path.join(__dirname, "..");
-const srcPath = path.join(__dirname, "..", "src");
-const distPath = path.join(__dirname, "..", "dist");
-const version = require("../package.json").version;
 const fileSystem = require("fs-extra");
-
-const babelConfig = {
-  plugins: [
-    "babel-plugin-add-module-exports",
-    "babel-plugin-class-display-name",
-    "@babel/plugin-transform-runtime",
-    "@babel/proposal-class-properties",
-    "@babel/proposal-object-rest-spread",
-    "@babel/plugin-transform-object-assign"
-  ]
-};
-/*babelConfig.presets = [
-  // "@babel/preset-typescript",
-  [
-    "@babel/env",
-    {
-      targets: {
-        browsers: ["last 2 Chrome versions"]
-      }
-    }
-  ]
-];*/
 
 
 const plugins = [
@@ -71,8 +42,6 @@ function getRollupConfig(component) {
   const outModuleName = component.id;
   const outputFile = component.js.output;
 
-  console.log("outputFile: ", outputFile);
-
   return {
     input: input,
     output: {
@@ -98,19 +67,12 @@ function getRollupConfig(component) {
   };
 }
 
-
-
 module.exports = () => {
   return new Promise((resolve, reject) => {
     const promises = [];
-    // test
-    const _components = [components[0]];
-
     components.forEach((component) => {
       const rollupConfig = getRollupConfig(component);
       promises.push(new Promise((resolve, reject) => {
-        console.log("rollupConfig.input: ", rollupConfig.input);
-        console.log("rollupConfig.output: ", rollupConfig.output);
         return rollup({
           input: rollupConfig.input,
           plugins: rollupConfig.plugins
@@ -144,7 +106,10 @@ module.exports = () => {
           });
           const error = new Error(`Erreur dans l'écriture de ${component.js.output}:\n${err}\n\${errorMessage}`);
           reject(error);
-        }).then(resolve);
+        }).then(() => {
+          console.log(`Le fichier JavaScipt du composant ${component.id} a bien été buildé.`);
+          resolve();
+        });
 
       }));
     });
@@ -153,22 +118,12 @@ module.exports = () => {
 
     return Promise
       .all(promises)
-      .then(resolve)
-      .catch(reject);
+      .catch(reject)
+      .then(() => {
+        console.log(`*****
+Tous les fichiers JavaScripts ont bien été buildés`);
+        resolve();
+      })
 
-    // });
-    // return rollup({
-    //   input: rollupConfig.input,
-    //   plugins: rollupConfig.plugins
-    // }).catch((err) => {
-    //   throw err;
-    // }).then((bundle) => {
-    //   return bundle.write(rollupConfig.output)
-    // }).catch((err) => {
-    //   throw err;
-    // }).then(() => {
-    //   console.log("\n========\nRollup JS DONE\n========");
-    //   resolve();
-    // });
   });
 }
