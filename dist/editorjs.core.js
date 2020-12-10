@@ -3827,7 +3827,7 @@
       key: "sanitize",
       get: function get() {
         return {
-          b: {}
+          strong: {}
         };
       }
     }]);
@@ -4842,6 +4842,123 @@
   LinkInlineTool.title = 'Link';
 
   /**
+   * Bold Tool
+   *
+   * Inline Toolbar Tool
+   *
+   * Makes selected text bolder
+   */
+
+  var NbspInlineTool = /*#__PURE__*/function () {
+    function NbspInlineTool() {
+      _classCallCheck(this, NbspInlineTool);
+
+      /**
+       * Native Document's command that uses for Nbsp
+       */
+      this.commandName = 'insertText';
+      /**
+       * Styles
+       */
+
+      this.CSS = {
+        button: 'ce-inline-tool',
+        buttonActive: 'ce-inline-tool--active',
+        buttonModifier: 'ce-inline-tool--bold'
+      };
+      /**
+       * Elements
+       */
+
+      this.nodes = {
+        button: undefined
+      };
+    }
+    /**
+     * Sanitizer Rule
+     * Leave <b> tags
+     *
+     * @returns {object}
+     */
+
+
+    _createClass(NbspInlineTool, [{
+      key: "render",
+
+      /**
+       * Create button for Inline Toolbar
+       */
+      value: function render() {
+        this.nodes.button = document.createElement('button');
+        this.nodes.button.type = 'button';
+        this.nodes.button.classList.add(this.CSS.button, this.CSS.buttonModifier);
+        this.nodes.button.appendChild(Dom.svg('bold', 12, 14)); // to be updated to NBSP
+
+        return this.nodes.button;
+      }
+      /**
+       * replace selection with '
+       *
+       * @param {Range} range - range to wrap
+       */
+
+    }, {
+      key: "surround",
+      value: function surround(range) {
+        document.execCommand(this.commandName, true, "\xA0");
+      }
+      /**
+       * Check selection and set activated state to button if there are '&#160;' character
+       *
+       * @param {Selection} selection - selection to check
+       *
+       * @returns {boolean}
+       */
+
+    }, {
+      key: "checkState",
+      value: function checkState(selection) {
+        var isActive = document.queryCommandState(this.commandName);
+        this.nodes.button.classList.toggle(this.CSS.buttonActive, isActive);
+        return isActive;
+      }
+      /**
+       * Set a shortcut
+       *
+       * @returns {boolean}
+       */
+
+    }, {
+      key: "shortcut",
+      get: function get() {
+        return 'CMD+ ';
+      }
+    }], [{
+      key: "sanitize",
+      get: function get() {
+        return {
+          b: {}
+        };
+      }
+    }]);
+
+    return NbspInlineTool;
+  }();
+  /**
+   * Specifies Tool as Inline Toolbar Tool
+   *
+   * @returns {boolean}
+   */
+
+  NbspInlineTool.displayName = "NbspInlineTool";
+  NbspInlineTool.isInline = true;
+  /**
+   * Title for hover-tooltip
+   */
+
+  NbspInlineTool.title = 'Insecable';
+
+  /**
    * This tool will be shown in place of a block without corresponding plugin
    * It will store its data inside and pass it back with article saving
    */
@@ -5213,7 +5330,7 @@
       }
       /**
        * Returns internal tools
-       * Includes Bold, Italic, Link and Paragraph
+       * Includes Bold, Italic, Link, Nbsp and Paragraph
        */
 
     }, {
@@ -5471,6 +5588,9 @@
           },
           link: {
             class: LinkInlineTool
+          },
+          nbsp: {
+            class: NbspInlineTool
           },
           paragraph: {
             class: Paragraph,

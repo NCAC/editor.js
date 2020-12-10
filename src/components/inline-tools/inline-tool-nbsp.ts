@@ -8,7 +8,7 @@ import { InlineTool, SanitizerConfig } from '../../../types';
  *
  * Makes selected text bolder
  */
-export class BoldInlineTool implements InlineTool {
+export class NbspInlineTool implements InlineTool {
   /**
    * Specifies Tool as Inline Toolbar Tool
    *
@@ -19,7 +19,7 @@ export class BoldInlineTool implements InlineTool {
   /**
    * Title for hover-tooltip
    */
-  public static title = 'Bold';
+  public static title = 'Insecable';
 
   /**
    * Sanitizer Rule
@@ -29,14 +29,14 @@ export class BoldInlineTool implements InlineTool {
    */
   public static get sanitize(): SanitizerConfig {
     return {
-      strong: {},
+      b: {},
     } as SanitizerConfig;
   }
 
   /**
-   * Native Document's command that uses for Bold
+   * Native Document's command that uses for Nbsp
    */
-  private readonly commandName: string = 'bold';
+  private readonly commandName: string = 'insertText';
 
   /**
    * Styles
@@ -61,22 +61,22 @@ export class BoldInlineTool implements InlineTool {
     this.nodes.button = document.createElement('button') as HTMLButtonElement;
     this.nodes.button.type = 'button';
     this.nodes.button.classList.add(this.CSS.button, this.CSS.buttonModifier);
-    this.nodes.button.appendChild(Dom.svg('bold', 12, 14));
+    this.nodes.button.appendChild(Dom.svg('bold', 12, 14)); // to be updated to NBSP
 
     return this.nodes.button;
   }
 
   /**
-   * Wrap range with <b> tag
+   * replace selection with '
    *
    * @param {Range} range - range to wrap
    */
   public surround(range: Range): void {
-    document.execCommand(this.commandName);
+    document.execCommand(this.commandName, true, '\u00A0');
   }
 
   /**
-   * Check selection and set activated state to button if there are <b> tag
+   * Check selection and set activated state to button if there are '&#160;' character
    *
    * @param {Selection} selection - selection to check
    *
@@ -96,6 +96,6 @@ export class BoldInlineTool implements InlineTool {
    * @returns {boolean}
    */
   public get shortcut(): string {
-    return 'CMD+B';
+    return 'CMD+ ';
   }
 }

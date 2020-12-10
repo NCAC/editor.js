@@ -13,7 +13,9 @@ import {
 import { BoldInlineTool } from '../inline-tools/inline-tool-bold';
 import { ItalicInlineTool } from '../inline-tools/inline-tool-italic';
 import { LinkInlineTool } from '../inline-tools/inline-tool-link';
+import { NbspInlineTool } from '../inline-tools/inline-tool-nbsp';
 import { Stub } from '../tools/stub';
+
 
 /**
  * @module Editor.js Tools Submodule
@@ -384,13 +386,14 @@ export class Tools extends Module {
 
   /**
    * Returns internal tools
-   * Includes Bold, Italic, Link and Paragraph
+   * Includes Bold, Italic, Link, Nbsp and Paragraph
    */
   public get internalTools(): { [toolName: string]: ToolConstructable | ToolSettings } {
     return {
       bold: { class: BoldInlineTool },
       italic: { class: ItalicInlineTool },
       link: { class: LinkInlineTool },
+      nbsp: { class: NbspInlineTool },
       paragraph: {
         class: Paragraph,
         inlineToolbar: true,
