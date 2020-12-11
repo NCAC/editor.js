@@ -316,7 +316,7 @@
 .cdx-settings-button:hover,.ce-inline-tool:hover,.ce-settings__button:hover {
   background-color: #eff2f5
 }
-.cdx-settings-button--active,.ce-inline-tool--active,.ce-settings__button--active,.ce-settings__button--selected {
+.cdx-settings-button--active,.cdx-settings-button.cdx-settings-button--active,.ce-inline-tool--active,.ce-settings__button--active,.ce-settings__button--selected {
   color: #388ae5
 }
 .cdx-settings-button--focused,.ce-conversion-tool--focused,.ce-inline-tool--focused,.ce-settings__button--focused {
