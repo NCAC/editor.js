@@ -1,0 +1,23 @@
+.cdx-list {
+  margin: 0;
+  outline: 0;
+  padding-left: 40px
+}
+.cdx-list__item {
+  padding: 5.5px 0 5.5px 3px;
+  line-height: 1.6em
+}
+.cdx-list--unordered {
+  list-style: disc
+}
+.cdx-list--ordered {
+  list-style: decimal
+}
+.cdx-list-settings {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex
+}
+.cdx-list-settings .cdx-settings-button {
+  width: 50%
+}

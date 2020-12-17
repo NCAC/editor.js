@@ -1,4 +1,4 @@
-var Paragraph = (function (exports) {
+(function () {
   'use strict';
 
   function _typeof(obj) {
@@ -626,8 +626,6 @@ var Paragraph = (function (exports) {
   Paragraph.displayName = "Paragraph";
   Paragraph.displayName = 'Paragraph';
 
-  exports.Paragraph = Paragraph;
+  window.Paragraph = Paragraph;
 
-  return exports;
-
-}({}));
+}());

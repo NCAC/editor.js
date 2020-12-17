@@ -1,5 +1,5 @@
 import { Paragraph } from '../tools/paragraph/';
-import {Module} from '../__module';
+import { Module } from '../__module';
 import { deepMerge, isFunction, log, sequence } from '../utils';
 import {
   BlockToolConstructable,

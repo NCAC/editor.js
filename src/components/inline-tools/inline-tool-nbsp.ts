@@ -61,13 +61,13 @@ export class NbspInlineTool implements InlineTool {
     this.nodes.button = document.createElement('button') as HTMLButtonElement;
     this.nodes.button.type = 'button';
     this.nodes.button.classList.add(this.CSS.button, this.CSS.buttonModifier);
-    this.nodes.button.appendChild(Dom.svg('bold', 12, 14)); // to be updated to NBSP
+    this.nodes.button.appendChild(Dom.svg('unsecable', 16, 14));
 
     return this.nodes.button;
   }
 
   /**
-   * replace selection with '
+   * replace selection with &nbsp;
    *
    * @param {Range} range - range to wrap
    */

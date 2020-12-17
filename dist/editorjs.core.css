@@ -113,12 +113,31 @@
   max-width: 650px
 }
 .ce-toolbar__plus {
-  @apply --toolbox-button;
+  -webkit-box-pack: center;
+  -ms-flex-pack: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
   -ms-flex-negative: 0;
+  display: -webkit-inline-box;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
   position: absolute;
   left: -webkit-calc(34px * -1);
   left: calc(34px * -1);
-  flex-shrink: 0
+  flex-shrink: 0;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  width: 34px;
+  height: 34px;
+  color: #707684
+}
+.cdx-settings-button--active,.cdx-settings-button.cdx-settings-button--active,.ce-inline-tool--active,.ce-settings__button--active,.ce-settings__button--selected,.ce-toolbar__plus--active,.ce-toolbar__plus:hover,.ce-toolbox__button--active,.ce-toolbox__button:hover {
+  color: #388ae5
+}
+.ce-conversion-tool--active,.ce-toolbar__plus--active,.ce-toolbox__button--active {
+  -webkit-animation: .75s forwards bounceIn;
+  animation: .75s forwards bounceIn
 }
 .ce-toolbar__plus-shortcut {
   opacity: .6;
@@ -184,9 +203,21 @@
   opacity: 1
 }
 .ce-toolbox__button {
-  @apply --toolbox-button;
+  -webkit-box-pack: center;
+  -ms-flex-pack: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
   -ms-flex-negative: 0;
-  flex-shrink: 0
+  display: -webkit-inline-box;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+  flex-shrink: 0;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  width: 34px;
+  height: 34px;
+  color: #707684
 }
 .ce-inline-toolbar__shortcut,.ce-toolbox-button-tooltip__shortcut {
   opacity: .6;
@@ -316,9 +347,6 @@
 .cdx-settings-button:hover,.ce-inline-tool:hover,.ce-settings__button:hover {
   background-color: #eff2f5
 }
-.cdx-settings-button--active,.cdx-settings-button.cdx-settings-button--active,.ce-inline-tool--active,.ce-settings__button--active,.ce-settings__button--selected {
-  color: #388ae5
-}
 .cdx-settings-button--focused,.ce-conversion-tool--focused,.ce-inline-tool--focused,.ce-settings__button--focused {
   -webkit-box-shadow: inset 0 0 0 1px rgba(7,161,227,.08);
   box-shadow: inset 0 0 0 1px rgba(7,161,227,.08);
@@ -439,8 +467,6 @@
   margin-right: 0!important
 }
 .ce-conversion-tool--active {
-  -webkit-animation: .75s forwards bounceIn;
-  animation: .75s forwards bounceIn;
   color: #388ae5!important
 }
 .ce-settings {

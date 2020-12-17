@@ -1,4 +1,4 @@
-import { Paragraph } from './components/tools/paragraph/index';
+import { Paragraph } from './components/tools/paragraph';
 
 interface WindowInterface extends Window {
   Paragraph: any;

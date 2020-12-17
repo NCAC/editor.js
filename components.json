@@ -13,12 +13,23 @@
   {
     "id": "Paragraph",
     "js": {
-      "input": "src/components/tools/paragraph/index.ts",
+      "input": "src/plugin-paragraph.ts",
       "output": "dist/editorjs.paragraph.js"
     },
     "css": {
       "input": "src/components/tools/paragraph/paragraph.styl",
       "outputFileName": "editorjs.paragraph.css"
+    }
+  },
+  {
+    "id": "List",
+    "js": {
+      "input": "src/components/tools/list/index.ts",
+      "output": "dist/editorjs.list.js"
+    },
+    "css": {
+      "input": "src/components/tools/list/list.styl",
+      "outputFileName": "editorjs.list.css"
     }
   }
 ]

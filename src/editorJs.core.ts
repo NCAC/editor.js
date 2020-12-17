@@ -132,6 +132,7 @@ class EditorJS {
 interface WindowInterface extends Window {
   EditorJS: any
   Paragraph: any;
+  List: any;
 }
 
 (window as WindowInterface & typeof globalThis).EditorJS = EditorJS;

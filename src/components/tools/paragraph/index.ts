@@ -70,11 +70,6 @@ export class Paragraph implements BlockTool {
   public settingsButtons: HTMLElement[];
 
   /**
-   * Main stub wrapper
-   */
-  private readonly wrapper: HTMLElement;
-
-  /**
    * Editor.js API
    */
   private readonly api: API;
