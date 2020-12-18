@@ -284,7 +284,7 @@ export class UI extends Module<UINodes> {
     /**
      * Set customizable bottom zone height
      */
-    this.nodes.redactor.style.paddingBottom = this.config.minHeight + 'px';
+    this.nodes.redactor.style.paddingBottom = this.config.minHeight;
 
     this.nodes.wrapper.appendChild(this.nodes.redactor);
     this.nodes.holder.appendChild(this.nodes.wrapper);
