@@ -4,7 +4,7 @@
   z-index: 1;
   box-sizing: border-box
 }
-.ce-conversion-tool--hidden,.ce-inline-tool--link .icon--unlink,.ce-inline-tool--unlink .icon--link,.ce-inline-toolbar__dropdown--hidden,.ce-toolbar__plus--hidden,.codex-editor .hide,.codex-editor__redactor--hidden {
+.ce-conversion-tool--hidden,.ce-inline-tool--link .icon--unlink,.ce-inline-tool--unlink .icon--link,.ce-inline-toolbar__dropdown--hidden,.ce-toolbar__plus--hidden,.ce-toolbar__plus.ce-toolbar__plus--hidden,.codex-editor .hide,.codex-editor__redactor--hidden {
   display: none
 }
 .codex-editor__redactor [contenteditable]:empty::after {

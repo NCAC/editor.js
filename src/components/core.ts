@@ -149,7 +149,7 @@ export class Core {
      *
      * @type {number}
      */
-    this.config.minHeight = this.config.minHeight !== undefined ? this.config.minHeight : 300;
+    this.config.minHeight = this.config.minHeight !== undefined ? this.config.minHeight : '300';
 
     /**
      * Default block type

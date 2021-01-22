@@ -14969,7 +14969,7 @@
          */
 
 
-        this.nodes.redactor.style.paddingBottom = this.config.minHeight + 'px';
+        this.nodes.redactor.style.paddingBottom = this.config.minHeight;
         this.nodes.wrapper.appendChild(this.nodes.redactor);
         this.nodes.holder.appendChild(this.nodes.wrapper);
       }
@@ -19607,7 +19607,7 @@
          * @type {number}
          */
 
-        this.config.minHeight = this.config.minHeight !== undefined ? this.config.minHeight : 300;
+        this.config.minHeight = this.config.minHeight !== undefined ? this.config.minHeight : '300';
         /**
          * Default block type
          * Uses in case when there is no blocks passed
