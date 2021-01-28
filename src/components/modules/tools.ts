@@ -14,7 +14,9 @@ import { BoldInlineTool } from '../inline-tools/inline-tool-bold';
 import { ItalicInlineTool } from '../inline-tools/inline-tool-italic';
 import { LinkInlineTool } from '../inline-tools/inline-tool-link';
 import { NbspInlineTool } from '../inline-tools/inline-tool-nbsp';
+import { NormalInlineTool } from '../inline-tools/inline-tool-normal';
 import { Stub } from '../tools/stub';
+
 
 
 /**
@@ -394,6 +396,7 @@ export class Tools extends Module {
       italic: { class: ItalicInlineTool },
       link: { class: LinkInlineTool },
       nbsp: { class: NbspInlineTool },
+      normal: { class: NormalInlineTool },
       paragraph: {
         class: Paragraph,
         inlineToolbar: true,
